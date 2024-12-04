@@ -54,10 +54,10 @@ fastify.get("/room", (request, reply) => {
 
 // WebSocket handling
 wss.on("connection", (ws) => {
-  console.log("New WebSocket connection established");
+  console.log("New WebSocket connection established. Total clients:", wss.clients.size);
 
   ws.send(JSON.stringify({ type: "updateUsers", activeUsers }));
-  
+
   function broadcastActiveUsers() {
     console.log("Broadcasting active users:", activeUsers);
     const data = JSON.stringify({ type: "updateUsers", activeUsers });
@@ -68,7 +68,7 @@ wss.on("connection", (ws) => {
     });
   }
 
- ws.on("message", (message) => {
+  ws.on("message", (message) => {
     console.log("Received WebSocket message:", message);
     try {
       const data = JSON.parse(message);
@@ -97,7 +97,7 @@ wss.on("connection", (ws) => {
     }
   });
 
-    ws.on("close", () => {
+  ws.on("close", () => {
     console.log("WebSocket connection closed");
     const index = activeUsers.indexOf(ws.nickname);
     if (index > -1) {
