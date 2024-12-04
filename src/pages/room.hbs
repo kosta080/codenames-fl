@@ -1,58 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Game Room</title>
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <h1>Welcome to the Game Room</h1>
-      <p>Your nickname: <strong id="nickname">{{nickname}}</strong></p>
+<script>
+  const nickname = document.getElementById("nickname").innerText;
+  const userList = document.getElementById("userList");
+  const ws = new WebSocket(`ws://${window.location.host}`);
 
-      <h2>Connected Users:</h2>
-      <ul id="userList"></ul>
+  // Send join event on WebSocket connection
+  ws.addEventListener("open", () => {
+    ws.send(JSON.stringify({ type: "join", nickname }));
+  });
 
-      <form id="leaveForm">
-        <button type="submit">Leave Room</button>
-      </form>
+  // Handle incoming WebSocket messages
+  ws.addEventListener("message", (event) => {
+    const data = JSON.parse(event.data);
 
-      <script>
-        const nickname = document.getElementById("nickname").innerText;
-        const userList = document.getElementById("userList");
-        const ws = new WebSocket(`ws://${window.location.host}`);
+    if (data.type === "updateUsers") {
+      userList.innerHTML = ""; // Clear the current list
+      data.activeUsers.forEach((user) => {
+        const li = document.createElement("li");
+        li.innerText = user; // Add each user to the list
+        userList.appendChild(li);
+      });
+    }
+  });
 
-        // Send join event on WebSocket connection
-        ws.addEventListener("open", () => {
-          ws.send(JSON.stringify({ type: "join", nickname }));
-        });
+  // Handle leaving the room
+  document.getElementById("leaveForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    ws.send(JSON.stringify({ type: "leave", nickname }));
+    window.location.href = "/";
+  });
 
-        // Handle incoming messages
-        ws.addEventListener("message", (event) => {
-          const data = JSON.parse(event.data);
-
-          if (data.type === "updateUsers") {
-            userList.innerHTML = "";
-            data.activeUsers.forEach((user) => {
-              const li = document.createElement("li");
-              li.innerText = user;
-              userList.appendChild(li);
-            });
-          }
-        });
-
-        // Handle leaving the room
-        document.getElementById("leaveForm").addEventListener("submit", (e) => {
-          e.preventDefault();
-          ws.send(JSON.stringify({ type: "leave", nickname }));
-          window.location.href = "/";
-        });
-
-        // Handle WebSocket close
-        window.addEventListener("beforeunload", () => {
-          ws.send(JSON.stringify({ type: "leave", nickname }));
-        });
-      </script>
-    </div>
-  </body>
-</html>
+  // Notify server on page unload
+  window.addEventListener("beforeunload", () => {
+    ws.send(JSON.stringify({ type: "leave", nickname }));
+  });
+</script>
