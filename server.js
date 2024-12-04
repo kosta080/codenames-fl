@@ -106,6 +106,27 @@ fastify.post("/", function (request, reply) {
   return reply.view("/src/pages/index.hbs", params);
 });
 
+fastify.post("/join", (request, reply) => {
+  const { nickname } = request.body;
+
+  if (!nickname || nickname.trim() === "") {
+    return reply.view("/src/pages/index.hbs", { error: "Nickname is required", seo });
+  }
+
+  // Redirect to the game room page (e.g., "/room")
+  reply.redirect(`/room?nickname=${encodeURIComponent(nickname)}`);
+});
+
+fastify.get("/room", (request, reply) => {
+  const nickname = request.query.nickname;
+
+  if (!nickname) {
+    return reply.redirect("/");
+  }
+
+  reply.view("/src/pages/room.hbs", { nickname, seo });
+});
+
 // Run the server and report out to the logs
 fastify.listen(
   { port: process.env.PORT, host: "0.0.0.0" },
