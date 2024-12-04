@@ -56,13 +56,16 @@ fastify.get("/room", (request, reply) => {
 wss.on("connection", (ws) => {
   console.log("New WebSocket connection established. Total clients:", wss.clients.size);
 
+  // Send the current user list to the newly connected client
   ws.send(JSON.stringify({ type: "updateUsers", activeUsers }));
 
+  // Broadcast active users to all clients
   function broadcastActiveUsers() {
     console.log("Broadcasting active users:", activeUsers);
     const data = JSON.stringify({ type: "updateUsers", activeUsers });
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
+        console.log("Sending data to client:", data);
         client.send(data);
       }
     });
@@ -78,8 +81,9 @@ wss.on("connection", (ws) => {
         console.log(`User joined: ${nickname}`);
         if (!activeUsers.includes(nickname)) {
           activeUsers.push(nickname);
-          ws.nickname = nickname;
-          broadcastActiveUsers();
+          ws.nickname = nickname; // Associate nickname with the WebSocket instance
+          console.log("Active users after join:", activeUsers);
+          broadcastActiveUsers(); // Broadcast updated list
         }
       }
 
