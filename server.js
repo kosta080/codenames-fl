@@ -26,6 +26,7 @@ fastify.get("/", (request, reply) => {
   return reply.view("/src/pages/index.hbs", { seo });
 });
 
+
 fastify.post("/join", (request, reply) => {
   const { nickname } = request.body;
   console.log(`POST /join - Nickname: ${nickname}`);
@@ -33,14 +34,11 @@ fastify.post("/join", (request, reply) => {
     console.error("Nickname is required");
     return reply.view("/src/pages/index.hbs", { error: "Nickname is required", seo });
   }
-  if (!activeUsers.includes(nickname)) {
-    activeUsers.push(nickname);
-    console.log(`User added: ${nickname}`);
-  } else {
-    console.log(`User already exists: ${nickname}`);
-  }
+
+  // Redirect to the room page
   reply.redirect(`/room?nickname=${encodeURIComponent(nickname)}`);
 });
+
 
 fastify.get("/room", (request, reply) => {
   const nickname = request.query.nickname;
@@ -71,6 +69,7 @@ wss.on("connection", (ws) => {
       }
     });
   }
+  
 
   ws.on("message", (message) => {
     console.log("Received WebSocket message:", message);
@@ -80,11 +79,17 @@ wss.on("connection", (ws) => {
       if (data.type === "join") {
         const { nickname } = data;
         console.log(`User joined: ${nickname}`);
-        if (!activeUsers.includes(nickname)) {
+        console.log("Current active users before adding:", activeUsers);
+
+        const normalizedNickname = nickname.trim().toLowerCase();
+        if (!activeUsers.some((user) => user.toLowerCase() === normalizedNickname)) {
+          console.log("---> Adding nickname:", nickname);
           activeUsers.push(nickname);
           ws.nickname = nickname; // Associate nickname with the WebSocket instance
           console.log("Active users after join:", activeUsers);
           broadcastActiveUsers(); // Broadcast updated list
+        } else {
+          console.log("Nickname already exists:", nickname);
         }
       }
 
@@ -101,6 +106,8 @@ wss.on("connection", (ws) => {
       console.error("Invalid WebSocket message:", err.message);
     }
   });
+
+  
 
   ws.on("close", () => {
     console.log("WebSocket connection closed");
