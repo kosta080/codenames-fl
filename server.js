@@ -63,6 +63,7 @@ wss.on("connection", (ws) => {
   function broadcastActiveUsers() {
     console.log("Broadcasting active users:", activeUsers);
     const data = JSON.stringify({ type: "updateUsers", activeUsers });
+    console.log("sending data to " + wss.clients.count + "clients");
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         console.log("Sending data to client:", data);
