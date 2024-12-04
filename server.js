@@ -1,17 +1,16 @@
-/**
- * This is the main Node.js server script for your project
- * Check out the two endpoints this back-end API provides in fastify.get and fastify.post below
- */
 
 const path = require("path");
 
-// Require the fastify framework and instantiate it
 const fastify = require("fastify")({
-  // Set this to true for detailed logging:
   logger: false,
 });
 
-// ADD FAVORITES ARRAY VARIABLE FROM TODO HERE
+
+const WebSocket = require("ws");
+const activeUsers = []; // In-memory store for active users
+const wss = new WebSocket.Server({ noServer: true });
+
+
 
 // Setup our static files
 fastify.register(require("@fastify/static"), {
@@ -106,6 +105,8 @@ fastify.post("/", function (request, reply) {
   return reply.view("/src/pages/index.hbs", params);
 });
 
+
+// Handle join requests
 fastify.post("/join", (request, reply) => {
   const { nickname } = request.body;
 
@@ -113,18 +114,29 @@ fastify.post("/join", (request, reply) => {
     return reply.view("/src/pages/index.hbs", { error: "Nickname is required", seo });
   }
 
-  // Redirect to the game room page (e.g., "/room")
+  // Add the user to the active users list if not already present
+  if (!activeUsers.includes(nickname)) {
+    activeUsers.push(nickname);
+  }
+
+  // Redirect to the room page
   reply.redirect(`/room?nickname=${encodeURIComponent(nickname)}`);
 });
 
-fastify.get("/room", (request, reply) => {
+
+
+// Add a route to remove a user when they disconnect
+fastify.get("/leave", (request, reply) => {
   const nickname = request.query.nickname;
 
-  if (!nickname) {
-    return reply.redirect("/");
+  if (nickname) {
+    const index = activeUsers.indexOf(nickname);
+    if (index > -1) {
+      activeUsers.splice(index, 1); // Remove the user
+    }
   }
 
-  reply.view("/src/pages/room.hbs", { nickname, seo });
+  reply.redirect("/");
 });
 
 // Run the server and report out to the logs
@@ -138,3 +150,62 @@ fastify.listen(
     console.log(`Your app is listening on ${address}`);
   }
 );
+
+//ws start
+
+// Handle WebSocket connections
+wss.on("connection", (ws) => {
+  // Broadcast active users to all clients
+  function broadcastActiveUsers() {
+    const data = JSON.stringify({ type: "updateUsers", activeUsers });
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
+  }
+
+  ws.on("message", (message) => {
+    const data = JSON.parse(message);
+
+    if (data.type === "join") {
+      const { nickname } = data;
+      if (!activeUsers.includes(nickname)) {
+        activeUsers.push(nickname);
+        broadcastActiveUsers();
+      }
+    }
+
+    if (data.type === "leave") {
+      const { nickname } = data;
+      const index = activeUsers.indexOf(nickname);
+      if (index > -1) {
+        activeUsers.splice(index, 1);
+        broadcastActiveUsers();
+      }
+    }
+  });
+
+  ws.on("close", () => {
+    // Optionally handle disconnections
+  });
+});
+
+// Upgrade HTTP connections to WebSocket
+fastify.server.on("upgrade", (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit("connection", ws, request);
+  });
+});
+
+// Handle the room display
+fastify.get("/room", (request, reply) => {
+  const nickname = request.query.nickname;
+
+  if (!nickname) {
+    return reply.redirect("/");
+  }
+
+  reply.view("/src/pages/room.hbs", { nickname, seo });
+});
+//ws END

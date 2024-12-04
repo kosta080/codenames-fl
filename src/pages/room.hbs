@@ -8,8 +8,51 @@
   <body>
     <div class="wrapper">
       <h1>Welcome to the Game Room</h1>
-      <p>Your nickname: <strong>{{nickname}}</strong></p>
-      <p>More features coming soon!</p>
+      <p>Your nickname: <strong id="nickname">{{nickname}}</strong></p>
+
+      <h2>Connected Users:</h2>
+      <ul id="userList"></ul>
+
+      <form id="leaveForm">
+        <button type="submit">Leave Room</button>
+      </form>
+
+      <script>
+        const nickname = document.getElementById("nickname").innerText;
+        const userList = document.getElementById("userList");
+        const ws = new WebSocket(`ws://${window.location.host}`);
+
+        // Send join event on WebSocket connection
+        ws.addEventListener("open", () => {
+          ws.send(JSON.stringify({ type: "join", nickname }));
+        });
+
+        // Handle incoming messages
+        ws.addEventListener("message", (event) => {
+          const data = JSON.parse(event.data);
+
+          if (data.type === "updateUsers") {
+            userList.innerHTML = "";
+            data.activeUsers.forEach((user) => {
+              const li = document.createElement("li");
+              li.innerText = user;
+              userList.appendChild(li);
+            });
+          }
+        });
+
+        // Handle leaving the room
+        document.getElementById("leaveForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          ws.send(JSON.stringify({ type: "leave", nickname }));
+          window.location.href = "/";
+        });
+
+        // Handle WebSocket close
+        window.addEventListener("beforeunload", () => {
+          ws.send(JSON.stringify({ type: "leave", nickname }));
+        });
+      </script>
     </div>
   </body>
 </html>
