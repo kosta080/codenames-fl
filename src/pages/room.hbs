@@ -21,6 +21,9 @@
       <button id="leaveRoomButton">Leave Room</button>
       <button class="red-item" id="redLeaderButton">Become Red Leader</button>
       <button class="blue-item" id="blueLeaderButton">Become Blue Leader</button>
+      
+      <button class="red-item" id="redJoinButton">Join Red</button>
+      <button class="blue-item" id="blueJoinButton">Join Blue</button>
     </div>
 
     <script>
@@ -60,26 +63,34 @@
         }
       });
 
-      // Leave Room button functionality
       document.getElementById("leaveRoomButton").addEventListener("click", () => {
         console.log("Leaving the room.");
         ws.send(JSON.stringify({ type: "leave", nickname }));
         window.location.href = "/";
       });
 
-      // Become Red Leader button functionality
       document.getElementById("redLeaderButton").addEventListener("click", () => {
         console.log(`${nickname} wants to become Red Leader.`);
         ws.send(JSON.stringify({ type: "redLeader", nickname }));
       });
 
-      // Become Blue Leader button functionality
       document.getElementById("blueLeaderButton").addEventListener("click", () => {
         console.log(`${nickname} wants to become Blue Leader.`);
         ws.send(JSON.stringify({ type: "blueLeader", nickname }));
       });
 
-      // Notify server on page unload
+      
+      document.getElementById("redJoinButton").addEventListener("click", () => {
+        console.log(`${nickname} wants to join red`);
+        ws.send(JSON.stringify({ type: "redJoin", nickname }));
+      });
+
+      document.getElementById("blueJoinButton").addEventListener("click", () => {
+        console.log(`${nickname} wants to join blue.`);
+        ws.send(JSON.stringify({ type: "blueJoin", nickname }));
+      });
+
+      
       window.addEventListener("beforeunload", () => {
         ws.send(JSON.stringify({ type: "leave", nickname }));
       });

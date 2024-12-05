@@ -99,8 +99,8 @@ wss.on("connection", (ws) => {
         if (index > -1) {
           activeUsers.splice(index, 1);
           // Reset leadership if the leader leaves
-          if (redLeader === nickname) redLeader = null;
-          if (blueLeader === nickname) blueLeader = null;
+          //if (redLeader === nickname) redLeader = null;
+          //if (blueLeader === nickname) blueLeader = null;
           broadcastUpdate();
         }
       }
@@ -130,8 +130,8 @@ wss.on("connection", (ws) => {
       console.log(`Removing user: ${ws.nickname}`);
       activeUsers.splice(index, 1);
       // Reset leadership if the leader leaves
-      if (redLeader === ws.nickname) redLeader = null;
-      if (blueLeader === ws.nickname) blueLeader = null;
+      // if (redLeader === ws.nickname) redLeader = null;
+      // if (blueLeader === ws.nickname) blueLeader = null;
       broadcastUpdate();
     }
   });
