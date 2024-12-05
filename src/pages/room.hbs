@@ -45,11 +45,23 @@
       const blueTeamList = document.getElementById("blueTeamList");
       const protocol = window.location.protocol === "https:" ? "wss" : "ws";
       const ws = new WebSocket(`${protocol}://${window.location.host}`);
+      
+      let heartbeatInterval;
 
       // Send join event on WebSocket connection
       ws.addEventListener("open", () => {
         console.log("WebSocket connected. Sending join event.");
         ws.send(JSON.stringify({ type: "join", nickname }));
+        
+        heartbeatInterval = setInterval(() => {
+          console.log("Sending heartbeat.");
+          ws.send(JSON.stringify({ type: "heartbeat" }));
+        }, 10000); // Send heartbeat every 10 seconds
+      });
+      
+      ws.addEventListener("close", () => {
+        console.warn("WebSocket connection closed.");
+        clearInterval(heartbeatInterval);
       });
 
       // Handle incoming WebSocket messages

@@ -78,6 +78,8 @@ wss.on("connection", (ws) => {
       }
     });
   }
+  
+  
 
 
   ws.on("message", (message) => {
@@ -100,6 +102,11 @@ wss.on("connection", (ws) => {
         } else {
           console.log("Nickname already exists:", nickname);
         }
+      }
+      
+      if (data.type === "heartbeat") {
+        console.log(`Heartbeat received from: ${ws.nickname || "unknown"}`);
+        ws.send(JSON.stringify({ type: "heartbeat_ack" }));
       }
 
       if (data.type === "leave") {
@@ -145,7 +152,11 @@ wss.on("connection", (ws) => {
     } catch (err) {
       console.error("Invalid WebSocket message:", err.message);
     }
+    
+    
   });
+  
+  
 
   ws.on("close", () => {
     console.log("WebSocket connection closed");
