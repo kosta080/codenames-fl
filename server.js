@@ -65,11 +65,11 @@ wss.on("connection", (ws) => {
     console.log("Broadcasting update. Active Users:", activeUsers);
     const data = JSON.stringify({
       type: "updateUsers",
-      activeUsers,
-      redLeader,
-      blueLeader,
-      redTeamUsers,
-      blueTeamUsers, // Include these arrays even if they are empty
+      activeUsers: activeUsers || [],
+      redLeader: redLeader || null,
+      blueLeader: blueLeader || null,
+      redTeamUsers: redTeamUsers || [],
+      blueTeamUsers: blueTeamUsers || [], // Always send these arrays
     });
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {

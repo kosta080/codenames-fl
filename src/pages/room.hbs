@@ -49,38 +49,39 @@
 
       // Handle incoming WebSocket messages
       ws.addEventListener("message", (event) => {
-        const data = JSON.parse(event.data);
+      const data = JSON.parse(event.data);
 
-        if (data.type === "updateUsers") {
-          console.log("Updating user list, leaders, and teams:", data);
+      if (data.type === "updateUsers") {
+        console.log("Updating user list, leaders, and teams:", data);
 
-          // Update user list
-          userList.innerHTML = ""; // Clear the current list
-          data.activeUsers.forEach((user) => {
-            const li = document.createElement("li");
-            li.innerText = user; // Add each user to the list
-            userList.appendChild(li);
-          });
+        // Update user list
+        userList.innerHTML = ""; // Clear the current list
+        (data.activeUsers || []).forEach((user) => {
+          const li = document.createElement("li");
+          li.innerText = user; // Add each user to the list
+          userList.appendChild(li);
+        });
 
-          // Update Red Leader and Team
-          redLeaderDisplay.innerText = `Leader: ${data.redLeader || "None"}`;
-          redTeamList.innerHTML = ""; // Clear the current list
-          data.redTeamUsers.forEach((user, index) => {
-            const li = document.createElement("li");
-            li.innerText = `${index + 1}. ${user}`;
-            redTeamList.appendChild(li);
-          });
+        // Update Red Leader and Team
+        redLeaderDisplay.innerText = `Leader: ${data.redLeader || "None"}`;
+        redTeamList.innerHTML = ""; // Clear the current list
+        (data.redTeamUsers || []).forEach((user, index) => {
+          const li = document.createElement("li");
+          li.innerText = `${index + 1}. ${user}`;
+          redTeamList.appendChild(li);
+        });
 
-          // Update Blue Leader and Team
-          blueLeaderDisplay.innerText = `Leader: ${data.blueLeader || "None"}`;
-          blueTeamList.innerHTML = ""; // Clear the current list
-          data.blueTeamUsers.forEach((user, index) => {
-            const li = document.createElement("li");
-            li.innerText = `${index + 1}. ${user}`;
-            blueTeamList.appendChild(li);
-          });
-        }
-      });
+        // Update Blue Leader and Team
+        blueLeaderDisplay.innerText = `Leader: ${data.blueLeader || "None"}`;
+        blueTeamList.innerHTML = ""; // Clear the current list
+        (data.blueTeamUsers || []).forEach((user, index) => {
+          const li = document.createElement("li");
+          li.innerText = `${index + 1}. ${user}`;
+          blueTeamList.appendChild(li);
+        });
+      }
+    });
+
 
       // Event listeners for buttons
       document.getElementById("leaveRoomButton").addEventListener("click", () => {
