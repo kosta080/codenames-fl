@@ -3,6 +3,8 @@ const fastify = require("fastify")({ logger: false });
 const WebSocket = require("ws");
 
 const activeUsers = [];
+const redTeamUsers = [];
+const blueTeamUsers = [];
 let redLeader = null;
 let blueLeader = null;
 const wss = new WebSocket.Server({ noServer: true });
@@ -111,13 +113,27 @@ wss.on("connection", (ws) => {
         redLeader = nickname; // Assign Red Leader
         broadcastUpdate();
       }
-
       if (data.type === "blueLeader") {
         const { nickname } = data;
         console.log(`${nickname} wants to become Blue Leader.`);
         blueLeader = nickname; // Assign Blue Leader
         broadcastUpdate();
       }
+      
+      if (data.type === "redJoin") {
+        const { nickname } = data;
+        console.log(`${nickname} wants to join red.`);
+        switchTeam(nickname, redTeamUsers, blueTeamUsers, "red", "blue");
+        broadcastUpdate();
+      }
+
+      if (data.type === "blueJoin") {
+        const { nickname } = data;
+        console.log(`${nickname} wants to join blue.`);
+        switchTeam(nickname, blueTeamUsers, redTeamUsers, "blue", "red");
+        broadcastUpdate();
+      }
+      
     } catch (err) {
       console.error("Invalid WebSocket message:", err.message);
     }
@@ -153,3 +169,20 @@ fastify.listen(
     });
   }
 );
+
+
+
+function switchTeam(nickname, targetTeam, opposingTeam, targetTeamName, opposingTeamName) {
+  // Remove from opposing team if present
+  const opposingIndex = opposingTeam.indexOf(nickname);
+  if (opposingIndex > -1) {
+    opposingTeam.splice(opposingIndex, 1);
+    console.log(`${nickname} removed from ${opposingTeamName} team.`);
+  }
+
+  // Add to target team if not already present
+  if (!targetTeam.includes(nickname)) {
+    targetTeam.push(nickname);
+    console.log(`${nickname} added to ${targetTeamName} team.`);
+  }
+}
