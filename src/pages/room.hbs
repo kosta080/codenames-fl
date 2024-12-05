@@ -14,9 +14,9 @@
       <h2>Connected Users:</h2>
       <ul id="userList"></ul>
 
-      <form id="leaveForm">
-        <button type="submit">Leave Room</button>
-      </form>
+      <button id="leaveRoomButton">Leave Room</button>
+      <button id="redLeaderButton">Become Red Leader</button>
+      <button id="blueLeaderButton">Become Blue Leader</button>
     </div>
 
     <script>
@@ -46,14 +46,22 @@
         }
       });
 
-      // Handle leaving the room
-      document.getElementById("leaveForm").addEventListener("submit", (e) => {
-        e.preventDefault();
+      document.getElementById("leaveRoomButton").addEventListener("click", () => {
+        console.log("Leaving the room.");
         ws.send(JSON.stringify({ type: "leave", nickname }));
         window.location.href = "/";
       });
 
-      // Notify server on page unload
+      document.getElementById("redLeaderButton").addEventListener("click", () => {
+        console.log(`${nickname} wants to become Red Leader.`);
+        ws.send(JSON.stringify({ type: "redLeader", nickname }));
+      });
+
+      document.getElementById("blueLeaderButton").addEventListener("click", () => {
+        console.log(`${nickname} wants to become Blue Leader.`);
+        ws.send(JSON.stringify({ type: "blueLeader", nickname }));
+      });
+
       window.addEventListener("beforeunload", () => {
         ws.send(JSON.stringify({ type: "leave", nickname }));
       });
