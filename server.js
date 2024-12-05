@@ -126,12 +126,14 @@ wss.on("connection", (ws) => {
         const { nickname } = data;
         console.log(`${nickname} wants to become Red Leader.`);
         redLeader = nickname; // Assign Red Leader
+        switchTeam(nickname, redTeamUsers, blueTeamUsers, "red", "blue");
         broadcastUpdate();
       }
       if (data.type === "blueLeader") {
         const { nickname } = data;
         console.log(`${nickname} wants to become Blue Leader.`);
         blueLeader = nickname; // Assign Blue Leader
+        switchTeam(nickname, blueTeamUsers, redTeamUsers, "blue", "red");
         broadcastUpdate();
       }
       
