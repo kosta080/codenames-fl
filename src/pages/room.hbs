@@ -14,19 +14,21 @@
       <h2>Connected Users:</h2>
       <ul id="userList"></ul>
 
-      <h2>Leaders:</h2>
-      <p id="redLeader">Red Leader: None</p>
-      <p id="blueLeader">Blue Leader: None</p>
+      <h2>Red Team:</h2>
+      <p id="redLeader">Leader: None</p>
+      <ul id="redTeamList"></ul>
 
-      
+      <h2>Blue Team:</h2>
+      <p id="blueLeader">Leader: None</p>
+      <ul id="blueTeamList"></ul>
+
       <button class="team-btn red-item" id="redLeaderButton">🔴👑<br>Become Red Leader</button>
-      <button class="team-btn blue-item" id="blueLeaderButton">🔵👑<br>Become Blue Leader </button>
+      <button class="team-btn blue-item" id="blueLeaderButton">🔵👑<br>Become Blue Leader</button>
       <br><br>
       <button class="team-btn red-item" id="redJoinButton">🔴<br>Join Red</button>
       <button class="team-btn blue-item" id="blueJoinButton">🔵<br>Join Blue</button>
       <br><br>
       <button id="leaveRoomButton">Leave Room</button>
-      
     </div>
 
     <script>
@@ -34,6 +36,8 @@
       const userList = document.getElementById("userList");
       const redLeaderDisplay = document.getElementById("redLeader");
       const blueLeaderDisplay = document.getElementById("blueLeader");
+      const redTeamList = document.getElementById("redTeamList");
+      const blueTeamList = document.getElementById("blueTeamList");
       const protocol = window.location.protocol === "https:" ? "wss" : "ws";
       const ws = new WebSocket(`${protocol}://${window.location.host}`);
 
@@ -48,7 +52,7 @@
         const data = JSON.parse(event.data);
 
         if (data.type === "updateUsers") {
-          console.log("Updating user list and leaders:", data);
+          console.log("Updating user list, leaders, and teams:", data);
 
           // Update user list
           userList.innerHTML = ""; // Clear the current list
@@ -58,14 +62,27 @@
             userList.appendChild(li);
           });
 
-          // Update Red Leader
-          redLeaderDisplay.innerText = `Red Leader: ${data.redLeader || "None"}`;
+          // Update Red Leader and Team
+          redLeaderDisplay.innerText = `Leader: ${data.redLeader || "None"}`;
+          redTeamList.innerHTML = ""; // Clear the current list
+          data.redTeamUsers.forEach((user, index) => {
+            const li = document.createElement("li");
+            li.innerText = `${index + 1}. ${user}`;
+            redTeamList.appendChild(li);
+          });
 
-          // Update Blue Leader
-          blueLeaderDisplay.innerText = `Blue Leader: ${data.blueLeader || "None"}`;
+          // Update Blue Leader and Team
+          blueLeaderDisplay.innerText = `Leader: ${data.blueLeader || "None"}`;
+          blueTeamList.innerHTML = ""; // Clear the current list
+          data.blueTeamUsers.forEach((user, index) => {
+            const li = document.createElement("li");
+            li.innerText = `${index + 1}. ${user}`;
+            blueTeamList.appendChild(li);
+          });
         }
       });
 
+      // Event listeners for buttons
       document.getElementById("leaveRoomButton").addEventListener("click", () => {
         console.log("Leaving the room.");
         ws.send(JSON.stringify({ type: "leave", nickname }));
@@ -82,9 +99,8 @@
         ws.send(JSON.stringify({ type: "blueLeader", nickname }));
       });
 
-      
       document.getElementById("redJoinButton").addEventListener("click", () => {
-        console.log(`${nickname} wants to join red`);
+        console.log(`${nickname} wants to join red.`);
         ws.send(JSON.stringify({ type: "redJoin", nickname }));
       });
 
@@ -93,10 +109,11 @@
         ws.send(JSON.stringify({ type: "blueJoin", nickname }));
       });
 
-      
+      // Notify server on page unload
       window.addEventListener("beforeunload", () => {
         ws.send(JSON.stringify({ type: "leave", nickname }));
       });
+      
     </script>
   </body>
 </html>

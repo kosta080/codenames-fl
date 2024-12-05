@@ -63,7 +63,14 @@ wss.on("connection", (ws) => {
   // Broadcast active users and leader information to all clients
   function broadcastUpdate() {
     console.log("Broadcasting update. Active Users:", activeUsers);
-    const data = JSON.stringify({ type: "updateUsers", activeUsers, redLeader, blueLeader });
+    const data = JSON.stringify({
+      type: "updateUsers",
+      activeUsers,
+      redLeader,
+      blueLeader,
+      redTeamUsers,
+      blueTeamUsers, // Include these arrays even if they are empty
+    });
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         console.log("Sending data to client:", data);
@@ -71,6 +78,7 @@ wss.on("connection", (ws) => {
       }
     });
   }
+
 
   ws.on("message", (message) => {
     console.log("Received WebSocket message:", message);
