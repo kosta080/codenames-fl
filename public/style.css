@@ -1,12 +1,4 @@
-/******************************************************************************
-START Glitch hello-app default styles
 
-The styles in this section do some minimal CSS resets, set default fonts and 
-colors, and handle the layout for our footer and "Remix on Glitch" button. If
-you're new to CSS they may seem a little complicated, but you can scroll down
-to this section's matching END comment to see page-specific styles.
-******************************************************************************/
-/* Our default values set as CSS variables */
 :root {
   --color-bg: #BDC9FF;
   --color-text-main: #000000;
@@ -42,7 +34,6 @@ to this section's matching END comment to see page-specific styles.
 
 /* Our remix on glitch button */
 .btn--remix {
-  font-family: HK Grotesk;
   padding: 0.75rem 1rem;
   font-size: 1.1rem;
   line-height: 1rem;
@@ -55,7 +46,7 @@ to this section's matching END comment to see page-specific styles.
   box-sizing: border-box;
   border-radius: 4px;
   text-decoration: none;
-  color: #000;
+  color: #000000;
   white-space: nowrap;
   margin-left: auto;
 }
@@ -74,19 +65,19 @@ to this section's matching END comment to see page-specific styles.
   padding: 1rem 0 0.75rem 0;
   width: 100%;
   flex-wrap: wrap;
-  border-top: 4px solid #fff;
+  border-top: 4px solid #ffffff;
 }
 
 .footer a:not(.btn--remix):link,
 a:not(.btn--remix):visited {
-  font-family: HK Grotesk;
   font-style: normal;
   font-weight: normal;
   font-size: 1.1rem;
-  color: #000;
+  color: #000000;
   text-decoration: none;
   border-style: none;
 }
+
 .footer a:hover {
   background: var(--color-primary);
 }
@@ -111,7 +102,6 @@ body {
 /* Page structure */
 .wrapper {
   min-height: var(--wrapper-height);
-  display: grid;
   place-items: center;
   margin: 0 1rem;
 }
@@ -129,7 +119,6 @@ p {
 /* Title h1 style */
 .title {
   color: var(--color-text-header);
-  font-family: HK Grotesk;
   font-style: normal;
   font-weight: bold;
   font-size: 70px;
@@ -152,31 +141,37 @@ p {
 .color-info {
   margin-left: 5px;
 }
+
 .color-search {
   margin-top: 3rem;
 }
+
 .color-form {
   width: 90%;
   max-width: 500px;
   margin-left: 5px;
 }
+
 .color-form a:not(.btn--remix) {
   font-weight: bold;
   color: var(--color-text-main);
   margin-top: 8px;
 }
+
 .color-form button {
   margin-top: 8px;
 }
+
 .color-form button:hover {
   cursor: pointer;
   box-shadow: -8px 4px 20px #9BE7D8;
 }
+
 form {
   margin: 0.75rem 0;
 }
-button,
-input {
+
+button, input {
   font-family: inherit;
   font-size: 100%;
   background: #FFFFFF;
@@ -185,6 +180,7 @@ input {
   border-radius: 4px;
   padding: 0.5rem 1rem;
 }
+
 label {
   color: #000000;
   font-weight: bold;
@@ -194,18 +190,24 @@ label {
 .instructions {
   margin: 1rem auto 0;
 }
+
 .instructions p {
   font-size: 1rem;
 }
+
 h2 {
   color: var(--color-text-header);
 }
 
+.team-btn {
+  width: 139px;
+}
 
 .red-item {
   background: #FF0000;
   color: #FFFFFF;
 }
+
 .blue-item {
   background: #0000FF;
   color: #FFFFFF;
