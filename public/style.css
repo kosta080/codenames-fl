@@ -212,3 +212,10 @@ h2 {
   background: #0000ad;
   color: #FFFFFF;
 }
+
+#teams {
+  display: block;
+}
+#teams span{
+  display: inline;
+}
