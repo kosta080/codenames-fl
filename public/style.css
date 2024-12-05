@@ -196,7 +196,7 @@ label {
 }
 
 h2 {
-  color: var(--color-text-header);
+  
 }
 
 .team-btn {
@@ -216,11 +216,12 @@ h2 {
 #teams {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  grid-gap: 10px;
   padding: 10px;
 }
-#teams > div{
-  background-color: rgba(255, 255, 255, 0.8);
+
+#teams > div {
   text-align: center;
-  padding: 20px 0;
+  padding: 0.5rem 1rem;
+  width: 194px;
 }
+

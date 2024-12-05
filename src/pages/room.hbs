@@ -15,20 +15,20 @@
       <ul id="userList"></ul>
 
       <div id="teams">
-        <div>
-          <h2>Red Team:</h2>
-          <p id="redLeader">Leader: None</p>
+        <div class="red-item">
+          Red Team:
+          <p id="redLeader">Caprain: None</p>
           <ul id="redTeamList"></ul>
         </div>
-        <div>
-          <h2>Blue Team:</h2>
-          <p id="blueLeader">Leader: None</p>
+        <div class="blue-item">
+          Blue Team:
+          <p id="blueLeader">Caprain: None</p>
           <ul id="blueTeamList"></ul>
         </div>
       </div>
 
-      <button class="team-btn red-item" id="redLeaderButton">🔴👑<br>Become Red Leader</button>
-      <button class="team-btn blue-item" id="blueLeaderButton">🔵👑<br>Become Blue Leader</button>
+      <button class="team-btn red-item" id="redLeaderButton">🔴👑<br>Become Red Caprain</button>
+      <button class="team-btn blue-item" id="blueLeaderButton">🔵👑<br>Become Blue Caprain</button>
       <br><br>
       <button class="team-btn red-item" id="redJoinButton">🔴<br>Join Red</button>
       <button class="team-btn blue-item" id="blueJoinButton">🔵<br>Join Blue</button>
@@ -69,7 +69,7 @@
       const data = JSON.parse(event.data);
 
       if (data.type === "updateUsers") {
-        console.log("Updating user list, leaders, and teams:", data);
+        console.log("Updating user list, Catains, and teams:", data);
 
         // Update user list
         userList.innerHTML = ""; // Clear the current list
@@ -80,11 +80,11 @@
         });
 
         // Update Red Leader and Team
-        redLeaderDisplay.innerText = `Leader: ${data.redLeader || "None"}`;
+        redLeaderDisplay.innerText = `Captain: ${data.redLeader || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
         (data.redTeamUsers || []).forEach((user, index) => {
           const li = document.createElement("li");
-          li.innerText = `${index + 1}. ${user}`;
+          li.innerText = `${user}`;
           redTeamList.appendChild(li);
         });
 
@@ -93,7 +93,7 @@
         blueTeamList.innerHTML = ""; // Clear the current list
         (data.blueTeamUsers || []).forEach((user, index) => {
           const li = document.createElement("li");
-          li.innerText = `${index + 1}. ${user}`;
+          li.innerText = `${user}`;
           blueTeamList.appendChild(li);
         });
       }
