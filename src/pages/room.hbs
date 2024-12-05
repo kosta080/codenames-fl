@@ -14,14 +14,20 @@
       <h2>Connected Users:</h2>
       <ul id="userList"></ul>
 
+      <h2>Leaders:</h2>
+      <p id="redLeader">Red Leader: None</p>
+      <p id="blueLeader">Blue Leader: None</p>
+
       <button id="leaveRoomButton">Leave Room</button>
-      <button class="red-item" id="redLeaderButton">Become Red Leader</button>
-      <button class="blue-item" id="blueLeaderButton">Become Blue Leader</button>
+      <button id="redLeaderButton">Become Red Leader</button>
+      <button id="blueLeaderButton">Become Blue Leader</button>
     </div>
 
     <script>
       const nickname = document.getElementById("nickname").innerText;
       const userList = document.getElementById("userList");
+      const redLeaderDisplay = document.getElementById("redLeader");
+      const blueLeaderDisplay = document.getElementById("blueLeader");
       const protocol = window.location.protocol === "https:" ? "wss" : "ws";
       const ws = new WebSocket(`${protocol}://${window.location.host}`);
 
@@ -36,32 +42,44 @@
         const data = JSON.parse(event.data);
 
         if (data.type === "updateUsers") {
-          console.log("Updating user list:", data.activeUsers);
+          console.log("Updating user list and leaders:", data);
+
+          // Update user list
           userList.innerHTML = ""; // Clear the current list
           data.activeUsers.forEach((user) => {
             const li = document.createElement("li");
             li.innerText = user; // Add each user to the list
             userList.appendChild(li);
           });
+
+          // Update Red Leader
+          redLeaderDisplay.innerText = `Red Leader: ${data.redLeader || "None"}`;
+
+          // Update Blue Leader
+          blueLeaderDisplay.innerText = `Blue Leader: ${data.blueLeader || "None"}`;
         }
       });
 
+      // Leave Room button functionality
       document.getElementById("leaveRoomButton").addEventListener("click", () => {
         console.log("Leaving the room.");
         ws.send(JSON.stringify({ type: "leave", nickname }));
         window.location.href = "/";
       });
 
+      // Become Red Leader button functionality
       document.getElementById("redLeaderButton").addEventListener("click", () => {
         console.log(`${nickname} wants to become Red Leader.`);
         ws.send(JSON.stringify({ type: "redLeader", nickname }));
       });
 
+      // Become Blue Leader button functionality
       document.getElementById("blueLeaderButton").addEventListener("click", () => {
         console.log(`${nickname} wants to become Blue Leader.`);
         ws.send(JSON.stringify({ type: "blueLeader", nickname }));
       });
 
+      // Notify server on page unload
       window.addEventListener("beforeunload", () => {
         ws.send(JSON.stringify({ type: "leave", nickname }));
       });

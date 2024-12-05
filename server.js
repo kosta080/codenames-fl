@@ -7,27 +7,27 @@ let redLeader = null;
 let blueLeader = null;
 const wss = new WebSocket.Server({ noServer: true });
 
-// Static files and templating
 fastify.register(require("@fastify/static"), {
   root: path.join(__dirname, "public"),
   prefix: "/",
 });
+
 fastify.register(require("@fastify/formbody"));
+
 fastify.register(require("@fastify/view"), {
   engine: { handlebars: require("handlebars") },
 });
 
 const seo = require("./src/seo.json");
+
 if (seo.url === "glitch-default") {
   seo.url = `https://${process.env.PROJECT_DOMAIN}.glitch.me`;
 }
 
-// Routes
 fastify.get("/", (request, reply) => {
   console.log("GET / - Serving index page");
   return reply.view("/src/pages/index.hbs", { seo });
 });
-
 
 fastify.post("/join", (request, reply) => {
   const { nickname } = request.body;
@@ -40,7 +40,6 @@ fastify.post("/join", (request, reply) => {
   // Redirect to the room page
   reply.redirect(`/room?nickname=${encodeURIComponent(nickname)}`);
 });
-
 
 fastify.get("/room", (request, reply) => {
   const nickname = request.query.nickname;
@@ -56,14 +55,13 @@ fastify.get("/room", (request, reply) => {
 wss.on("connection", (ws) => {
   console.log("New WebSocket connection established. Total clients:", wss.clients.size);
 
-  // Send the current user list to the newly connected client
-  ws.send(JSON.stringify({ type: "updateUsers", activeUsers }));
+  // Send the current user list and leader info to the newly connected client
+  ws.send(JSON.stringify({ type: "updateUsers", activeUsers, redLeader, blueLeader }));
 
-  // Broadcast active users to all clients
-  function broadcastActiveUsers() {
-    console.log("Broadcasting active users:", activeUsers);
-    const data = JSON.stringify({ type: "updateUsers", activeUsers });
-    console.log("sending data to " + wss.clients.count + "clients");
+  // Broadcast active users and leader information to all clients
+  function broadcastUpdate() {
+    console.log("Broadcasting update. Active Users:", activeUsers);
+    const data = JSON.stringify({ type: "updateUsers", activeUsers, redLeader, blueLeader });
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         console.log("Sending data to client:", data);
@@ -71,7 +69,6 @@ wss.on("connection", (ws) => {
       }
     });
   }
-  
 
   ws.on("message", (message) => {
     console.log("Received WebSocket message:", message);
@@ -89,7 +86,7 @@ wss.on("connection", (ws) => {
           activeUsers.push(nickname);
           ws.nickname = nickname; // Associate nickname with the WebSocket instance
           console.log("Active users after join:", activeUsers);
-          broadcastActiveUsers(); // Broadcast updated list
+          broadcastUpdate(); // Broadcast updated list and leader info
         } else {
           console.log("Nickname already exists:", nickname);
         }
@@ -101,15 +98,30 @@ wss.on("connection", (ws) => {
         const index = activeUsers.indexOf(nickname);
         if (index > -1) {
           activeUsers.splice(index, 1);
-          broadcastActiveUsers();
+          // Reset leadership if the leader leaves
+          if (redLeader === nickname) redLeader = null;
+          if (blueLeader === nickname) blueLeader = null;
+          broadcastUpdate();
         }
+      }
+
+      if (data.type === "redLeader") {
+        const { nickname } = data;
+        console.log(`${nickname} wants to become Red Leader.`);
+        redLeader = nickname; // Assign Red Leader
+        broadcastUpdate();
+      }
+
+      if (data.type === "blueLeader") {
+        const { nickname } = data;
+        console.log(`${nickname} wants to become Blue Leader.`);
+        blueLeader = nickname; // Assign Blue Leader
+        broadcastUpdate();
       }
     } catch (err) {
       console.error("Invalid WebSocket message:", err.message);
     }
   });
-
-  
 
   ws.on("close", () => {
     console.log("WebSocket connection closed");
@@ -117,7 +129,10 @@ wss.on("connection", (ws) => {
     if (index > -1) {
       console.log(`Removing user: ${ws.nickname}`);
       activeUsers.splice(index, 1);
-      broadcastActiveUsers();
+      // Reset leadership if the leader leaves
+      if (redLeader === ws.nickname) redLeader = null;
+      if (blueLeader === ws.nickname) blueLeader = null;
+      broadcastUpdate();
     }
   });
 });
