@@ -3,6 +3,8 @@ const fastify = require("fastify")({ logger: false });
 const WebSocket = require("ws");
 
 const activeUsers = [];
+let redLeader = null;
+let blueLeader = null;
 const wss = new WebSocket.Server({ noServer: true });
 
 // Static files and templating
