@@ -214,8 +214,13 @@ h2 {
 }
 
 #teams {
-  display: block;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 10px;
+  padding: 10px;
 }
-#teams span{
-  display: inline;
+#teams > div{
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
 }
