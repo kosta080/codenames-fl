@@ -225,4 +225,11 @@ h2 {
   width: 194px;
   text-align: left;
 }
+#board {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+#board > .item {
+   background: white;
+}
 

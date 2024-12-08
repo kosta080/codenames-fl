@@ -34,6 +34,15 @@
       <button class="team-btn blue-item" id="blueJoinButton">🔵<br>Join Blue</button>
       <br><br>
       <button id="leaveRoomButton">Leave Room</button>
+      
+      
+      <div id="board">
+        <button class="item" id="bti0">1</button>
+        <button class="item" id="bti1">2</button>
+        <button class="item" id="bti2">3</button>
+        <button class="item" id="bti3">4</button>
+        <button class="item" id="bti4">5</button>
+      </div>
     </div>
 
     <script>
@@ -130,6 +139,18 @@
       // Notify server on page unload
       window.addEventListener("beforeunload", () => {
         ws.send(JSON.stringify({ type: "leave", nickname }));
+      });
+      
+      document.getElementById("board").addEventListener("click", (event) => {
+        // Check if the clicked element is a button
+        if (event.target.tagName === "BUTTON") {
+          console.log(`Button ${event.target.innerText} was clicked!`);
+          // Do something based on the button clicked
+          const buttonId = event.target.id; // Get the button's id
+          console.log(`Button ID: ${buttonId}`);
+          // Add your custom logic here
+          ws.send(JSON.stringify({ type: "buttonClick", buttonId }));
+        }
       });
       
     </script>
