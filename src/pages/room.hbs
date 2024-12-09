@@ -36,13 +36,14 @@
       <button id="leaveRoomButton">Leave Room</button>
       
       
-      <div id="board">
-        <button class="item" id="bti0">1</button>
-        <button class="item" id="bti1">2</button>
-        <button class="item" id="bti2">3</button>
-        <button class="item" id="bti3">4</button>
-        <button class="item" id="bti4">5</button>
+       <div id="board">
+        <button class="item" data-button-id="1">1</button>
+        <button class="item" data-button-id="2">2</button>
+        <button class="item" data-button-id="3">3</button>
+        <button class="item" data-button-id="4">4</button>
+        <button class="item" data-button-id="5">5</button>
       </div>
+      
     </div>
 
     <script>
@@ -142,13 +143,9 @@
       });
       
       document.getElementById("board").addEventListener("click", (event) => {
-        // Check if the clicked element is a button
         if (event.target.tagName === "BUTTON") {
-          console.log(`Button ${event.target.innerText} was clicked!`);
-          // Do something based on the button clicked
-          const buttonId = event.target.id; // Get the button's id
-          console.log(`Button ID: ${buttonId}`);
-          // Add your custom logic here
+          const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
+          console.log(`Button with ID ${buttonId} was clicked!`);
           ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
         }
       });
