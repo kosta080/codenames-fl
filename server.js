@@ -83,7 +83,7 @@ wss.on("connection", (ws) => {
 
 
   ws.on("message", (message) => {
-    console.log("Received WebSocket message:", message);
+    //console.log("Received WebSocket message:", message);
     try {
       const data = JSON.parse(message);
 
@@ -105,8 +105,8 @@ wss.on("connection", (ws) => {
       }
       
       if (data.type === "heartbeat") {
-        console.log(`Heartbeat received from: ${ws.nickname || "unknown"}`);
-        ws.send(JSON.stringify({ type: "heartbeat_ack" }));
+        //console.log(`Heartbeat received from: ${ws.nickname || "unknown"}`);
+        //ws.send(JSON.stringify({ type: "heartbeat_ack" }));
       }
 
       if (data.type === "leave") {
@@ -150,6 +150,20 @@ wss.on("connection", (ws) => {
         switchTeam(nickname, blueTeamUsers, redTeamUsers, "blue", "red");
         broadcastUpdate();
       }
+      
+      if (data.type === "buttonClick") {
+        const { buttonId, nickname } = data;
+        console.log(`Button ${buttonId} clicked by ${nickname}`);
+
+        // Example: Broadcast the button click event to all clients
+        const broadcastData = JSON.stringify({type: "buttonClick", buttonId, nickname});
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(broadcastData);
+          }
+        });
+      }
+      
       
     } catch (err) {
       console.error("Invalid WebSocket message:", err.message);

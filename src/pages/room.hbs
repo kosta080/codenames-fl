@@ -149,7 +149,7 @@
           const buttonId = event.target.id; // Get the button's id
           console.log(`Button ID: ${buttonId}`);
           // Add your custom logic here
-          ws.send(JSON.stringify({ type: "buttonClick", buttonId }));
+          ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
         }
       });
       
