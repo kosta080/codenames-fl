@@ -37,11 +37,11 @@
       
       
        <div id="board">
+        <button class="item" data-button-id="0">0</button>
         <button class="item" data-button-id="1">1</button>
         <button class="item" data-button-id="2">2</button>
         <button class="item" data-button-id="3">3</button>
         <button class="item" data-button-id="4">4</button>
-        <button class="item" data-button-id="5">5</button>
       </div>
       
     </div>
@@ -110,9 +110,23 @@
         
         if (data.type === "updateWords"){
           console.log("Updating words:", data);
-          updateWord();
+          updateWord(data.words);
         }
       });
+      
+      function updateWord(words) {
+        words.forEach((word) => {
+          const button = document.querySelector(`[data-button-id="${word.index}"]`);
+          if (button) {
+            button.innerText = word.spell; // Update the button's text with the spell
+            
+            word.voters.forEach((voter) => {
+              button.innerText += voter;
+            });
+            
+          }
+        });
+      }
       
      
       // Event listeners for buttons

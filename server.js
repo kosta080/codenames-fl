@@ -182,6 +182,11 @@ wss.on("connection", (ws) => {
         // Example: Broadcast the button click event to all clients
         const broadcastData = JSON.stringify({type: "buttonClick", buttonId, nickname});
         wss.clients.forEach((client) => {
+          
+          if (!words[buttonId].voters.includes(nickname)) {
+            words[buttonId].voters.push(nickname);
+          }
+          
           if (client.readyState === WebSocket.OPEN) {
             //client.send(broadcastData);
             broadcastWords();
