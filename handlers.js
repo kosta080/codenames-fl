@@ -20,32 +20,26 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
         else if (type === "redLeader" || type === "blueLeader") {
           if (type === "redLeader") redLeader = nickname;
           if (type === "blueLeader") blueLeader = nickname;
-          switchTeam(nickname, type === "redLeader" ? redTeamUsers : blueTeamUsers, type === "redLeader" ? blueTeamUsers : redTeamUsers);
+          switchTeam(nickname, type === "redLeader" ? redTeamUsers : blueTeamUsers, 
+                     type === "redLeader" ? blueTeamUsers : redTeamUsers);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
         } 
         else if (type === "redJoin" || type === "blueJoin") {
-          if (type === "redJoin"){
-              
-          }
-          if (type === "blueJoin"){
-              
-          }
-            
-        }
+          switchTeam(nickname, type === "redJoin" ? redTeamUsers : blueTeamUsers, 
+                     type === "redJoin" ? blueTeamUsers : redTeamUsers);
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
+        } 
         else if (type === "buttonClick") {
-          // Remove nickname from all other words' voters
           words.forEach((word, index) => {
             if (index !== buttonId && word.voters.includes(nickname)) {
               word.voters = word.voters.filter(voter => voter !== nickname);
             }
           });
 
-          // Add nickname to the selected word's voters if not already present
           if (!words[buttonId].voters.includes(nickname)) {
             words[buttonId].voters.push(nickname);
           }
 
-          // Broadcast updated words
           broadcastUpdate(wss, { type: "updateWords", words });
         }
       } 
