@@ -7,7 +7,7 @@ if (seo.url === "glitch-default") {
 }
 
 fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "../public"),
+  root: path.join(__dirname, "./public"),
   prefix: "/",
 });
 

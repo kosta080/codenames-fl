@@ -10,20 +10,36 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
         if (type === "join") {
           if (!activeUsers.includes(nickname)) activeUsers.push(nickname);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
-        } else if (type === "leave") {
+        } 
+        else if (type === "leave") {
           const index = activeUsers.indexOf(nickname);
           if (index > -1) activeUsers.splice(index, 1);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
-        } else if (type === "redLeader" || type === "blueLeader") {
+        } 
+        else if (type === "redLeader" || type === "blueLeader") {
           if (type === "redLeader") redLeader = nickname;
           if (type === "blueLeader") blueLeader = nickname;
           switchTeam(nickname, type === "redLeader" ? redTeamUsers : blueTeamUsers, type === "redLeader" ? blueTeamUsers : redTeamUsers);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
-        } else if (type === "buttonClick") {
-          if (!words[buttonId].voters.includes(nickname)) words[buttonId].voters.push(nickname);
+        } 
+        else if (type === "buttonClick") {
+          // Remove nickname from all other words' voters
+          words.forEach((word, index) => {
+            if (index !== buttonId && word.voters.includes(nickname)) {
+              word.voters = word.voters.filter(voter => voter !== nickname);
+            }
+          });
+
+          // Add nickname to the selected word's voters if not already present
+          if (!words[buttonId].voters.includes(nickname)) {
+            words[buttonId].voters.push(nickname);
+          }
+
+          // Broadcast updated words
           broadcastUpdate(wss, { type: "updateWords", words });
         }
-      } catch (err) {
+      } 
+      catch (err) {
         console.error("Error parsing message", err);
       }
     });
