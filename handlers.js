@@ -10,6 +10,7 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
         if (type === "join") {
           if (!activeUsers.includes(nickname)) activeUsers.push(nickname);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
+          broadcastUpdate(wss, { type: "updateWords", words });
         } 
         else if (type === "leave") {
           const index = activeUsers.indexOf(nickname);
@@ -22,6 +23,15 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           switchTeam(nickname, type === "redLeader" ? redTeamUsers : blueTeamUsers, type === "redLeader" ? blueTeamUsers : redTeamUsers);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
         } 
+        else if (type === "redJoin" || type === "blueJoin") {
+          if (type === "redJoin"){
+              
+          }
+          if (type === "blueJoin"){
+              
+          }
+            
+        }
         else if (type === "buttonClick") {
           // Remove nickname from all other words' voters
           words.forEach((word, index) => {
