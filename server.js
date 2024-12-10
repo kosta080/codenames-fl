@@ -93,9 +93,19 @@ wss.on("connection", (ws) => {
     });
   }
   
+  function broadcastWords() {
+    const data = JSON.stringify({
+        type: "updateWords",
+        words: words
+    });
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    }); 
+  }
   
-
-
+  
   ws.on("message", (message) => {
     //console.log("Received WebSocket message:", message);
     try {
@@ -173,7 +183,8 @@ wss.on("connection", (ws) => {
         const broadcastData = JSON.stringify({type: "buttonClick", buttonId, nickname});
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(broadcastData);
+            //client.send(broadcastData);
+            broadcastWords();
           }
         });
       }
