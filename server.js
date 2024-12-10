@@ -9,6 +9,13 @@ let redLeader = null;
 let blueLeader = null;
 const wss = new WebSocket.Server({ noServer: true });
 
+class word {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
 fastify.register(require("@fastify/static"), {
   root: path.join(__dirname, "public"),
   prefix: "/",
