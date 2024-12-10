@@ -9,13 +9,13 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
 
         if (type === "join") {
           if (!activeUsers.includes(nickname)) activeUsers.push(nickname);
-          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
           broadcastUpdate(wss, { type: "updateWords", words });
         } 
         else if (type === "leave") {
           const index = activeUsers.indexOf(nickname);
           if (index > -1) activeUsers.splice(index, 1);
-          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
         } 
         else if (type === "redLeader" || type === "blueLeader") {
           if (type === "redLeader") {
