@@ -1,4 +1,4 @@
-const { broadcastUpdate, switchLeader } = require("./helpers");
+const { broadcastUpdate, switchTeam, switchLeader } = require("./helpers");
 
 function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader) {
   wss.on("connection", (ws) => {
