@@ -10,9 +10,16 @@ function broadcastUpdate(wss, data) {
 }
 
 function switchTeam(nickname, targetTeam, opposingTeam) {
+  console.log(`Switch team ${nickname}`);
   const opposingIndex = opposingTeam.indexOf(nickname);
   if (opposingIndex > -1) opposingTeam.splice(opposingIndex, 1);
   if (!targetTeam.includes(nickname)) targetTeam.push(nickname);
 }
 
-module.exports = { broadcastUpdate, switchTeam };
+function switchLeader(nickname, targetTeam, opposingTeam) {
+  const opposingIndex = opposingTeam.indexOf(nickname);
+  if (opposingIndex > -1) opposingTeam.splice(opposingIndex, 1); // Remove leader from opposing team
+  if (!targetTeam.includes(nickname)) targetTeam.push(nickname); // Ensure leader is in the target team
+}
+
+module.exports = { broadcastUpdate, switchTeam, switchLeader };

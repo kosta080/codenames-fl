@@ -1,4 +1,4 @@
-const { broadcastUpdate, switchTeam } = require("./helpers");
+const { broadcastUpdate, switchLeader } = require("./helpers");
 
 function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader) {
   wss.on("connection", (ws) => {
@@ -18,11 +18,15 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
         } 
         else if (type === "redLeader" || type === "blueLeader") {
-          if (type === "redLeader") redLeader = nickname;
-          if (type === "blueLeader") blueLeader = nickname;
-          switchTeam(nickname, type === "redLeader" ? redTeamUsers : blueTeamUsers, 
-                     type === "redLeader" ? blueTeamUsers : redTeamUsers);
-          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
+          if (type === "redLeader") {
+            redLeader = nickname;
+            switchLeader(nickname, redTeamUsers, blueTeamUsers);
+          }
+          if (type === "blueLeader") {
+            blueLeader = nickname;
+            switchLeader(nickname, blueTeamUsers, redTeamUsers);
+          }
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
         } 
         else if (type === "redJoin" || type === "blueJoin") {
           switchTeam(nickname, type === "redJoin" ? redTeamUsers : blueTeamUsers, 
