@@ -9,11 +9,18 @@ let redLeader = null;
 let blueLeader = null;
 const wss = new WebSocket.Server({ noServer: true });
 
-class word {
-  constructor(height, width) {
-    this.height = height;
-    this.width = width;
+
+class Word {
+  constructor(index, spell, voters) {
+    this.index = index;
+    this.spell = spell;
+    this.voters = voters;
   }
+}
+let words = [];
+for (let i = 0; i < 10; i++) {
+  const randomWord = Math.random().toString(36).substring(2, 7);
+  words.push(new Word(i, randomWord, []));
 }
 
 fastify.register(require("@fastify/static"), {
