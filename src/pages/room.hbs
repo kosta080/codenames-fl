@@ -143,27 +143,24 @@
               button.innerText += "\n"+voter;
             });
             
-            switch (word.type) {
-              case 0: button.style.backgroundColor = "gray"; break;
-              case 1: button.style.backgroundColor = "red"; break;
-              case -1: button.style.backgroundColor = "darkgray"; break;
-              case 2: button.style.backgroundColor = "blue"; break;
-              default: button.style.backgroundColor = "white"; break;
-            }
-            
+            button.style.backgroundColor = getColor(word.type);          
           }
         });
       }
       
-      function getColor(colorName) {
+      function getColor(type) {
+        let coorName = "";
+        switch (type) {
+          case 0: coorName = "--color-gray2"; break;
+          case 1: coorName = "--color-orange1"; break;
+          case -1: coorName = "--color-black"; break;
+          case 2: coorName = "--color-blue1"; break;
+          default: coorName = ""; break;
+        }
+        
         const rootStyles = getComputedStyle(document.documentElement);
-
-        // Retrieve the CSS variables
-        const colorGray = rootStyles.getPropertyValue("--color-gray1").trim();
-        const colorRed = rootStyles.getPropertyValue("--color-orange1").trim();
-        const colorDarkGray = rootStyles.getPropertyValue("--color-gray2").trim();
-        const colorBlue = rootStyles.getPropertyValue("--color-blue1").trim();
-        const defaultColor = "white";
+        const color = rootStyles.getPropertyValue(coorName).trim();
+        return color;
       }
      
       // Event listeners for buttons
