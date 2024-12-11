@@ -10,9 +10,9 @@
   --font-family: "HK Grotesk";
   --font-family-header: "HK Grotesk";
   
-  --color-blue1: #5598B6;
+  --color-blue1: #316fb7;
   --color-blue2: #124056;
-  --color-orange1: #B12A1F;
+  --color-orange1: #c22020;
   --color-orange2: #590202;
   --color-gray1: #D9D2D0;
   --color-gray2: #B6A18E;
@@ -216,6 +216,7 @@ h2 {
 
 .team-btn {
   width: 139px;
+  font-size: 0.7rem;
 }
 
 .red-item1 {
