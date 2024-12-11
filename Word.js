@@ -2,11 +2,11 @@ const fs = require("fs");
 const path = require("path");
 
 class Word {
-  constructor(index, spell, voters) {
+  constructor(index, spell, type, voters) {
     this.index = index;
     this.spell = spell;
     this.voters = voters;
-    this.type = 0;
+    this.type = type;
   }
 }
 

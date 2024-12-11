@@ -143,6 +143,14 @@
               button.innerText += "\n"+voter;
             });
             
+            switch (word.type) {
+              case 0: button.style.backgroundColor = "red"; break;
+              case 1: button.style.backgroundColor = "blue"; break;
+              case -1: button.style.backgroundColor = "gray"; break;
+              case 2: button.style.backgroundColor = "gold"; break;
+              default: button.style.backgroundColor = "white"; break;
+            }
+            
           }
         });
       }
