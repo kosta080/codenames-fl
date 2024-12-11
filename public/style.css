@@ -12,9 +12,10 @@
   
   --color-blue1: #5598B6;
   --color-blue2: #124056;
-  
   --color-orange1: #B12A1F;
-  --color-orange2: #124056;
+  --color-orange2: #590202;
+  --color-gray1: #D9D2D0;
+  --color-gray2: #B6A18E;
 }
 
 /* Basic page style resets */
@@ -217,15 +218,26 @@ h2 {
   width: 139px;
 }
 
-.red-item {
-  background: #ac0000;
+.red-item1 {
+  background: var(--color-orange1);
   color: #FFFFFF;
 }
 
-.blue-item {
-  background: #0000ad;
+.blue-item1 {
+  background: var(--color-blue1);
   color: #FFFFFF;
 }
+
+.red-item2 {
+  background: var(--color-orange2);
+  color: #FFFFFF;
+}
+
+.blue-item2 {
+  background: var(--color-blue2);
+  color: #FFFFFF;
+}
+
 
 #teams {
   display: grid;
