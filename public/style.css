@@ -258,25 +258,35 @@ h2 {
   grid-template-rows: repeat(5, 1fr);    /* 5 rows of equal height */
 }
 #board > .item {
-  background: var(--color-gray1); 
-  height: 20vw;
-  width: 20vw;
-  padding: 0px;
-  padding-top: 4px;
-  display: flex;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+    background: var(--color-gray1);
+    height: 20vw;
+    width: 20vw;
+    padding: 0px;
+    padding-top: 4px;
+    display: flex;
+    justify-content: flex-start;
+    color: white;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
 }
 
-.ds{
+.item > span{
+ font-size: 0.6rem;
+}
+
+.ds {
   box-shadow: rgb(0 0 0 / 47%) 0px 4px 6px 0px;
 }
-.be{
+
+.be {
   box-shadow: inset 5px 5px 6px #afafaf,
             inset -5px -5px 6px #ffffff;
 }
+
 .ds.be {
     box-shadow: rgb(0 0 0 / 47%) 0px 4px 7px 0px, 
       inset 3px 4px 3px #ffffff2b, 
