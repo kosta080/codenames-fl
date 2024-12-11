@@ -1,7 +1,8 @@
 const path = require("path");
 const WebSocket = require("ws");
 const mainRoutes = require("./mainRoutes");
-const Word = require("./Word");
+const { Word, loadWords } = require("./Word");
+const generateMap =  require("./map");
 const setupWebSocketHandlers = require("./handlers");
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -11,10 +12,16 @@ const blueTeamUsers = [];
 let redLeader = null;
 let blueLeader = null;
 
+const wordFilePath = path.join(__dirname, "words.txt");
+const wordList = loadWords(wordFilePath);
+const map = generateMap();
+
 let words = [];
-for (let i = 0; i < 10; i++) {
-  const randomWord = Math.random().toString(36).substring(2, 7);
-  words.push(new Word(i, randomWord, []));
+for (let i = 0; i <= 24; i++) {
+  if (i >= wordList.length) {
+    throw new Error("Not enough unique words in the list to fill the game.");
+  }
+  words.push(new Word(i, wordList[i], []));
 }
 
 setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
