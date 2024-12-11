@@ -238,3 +238,16 @@ h2 {
    background: white;
 }
 
+.ds{
+  box-shadow: rgb(0 0 0 / 47%) 0px 4px 6px 0px;
+}
+.be{
+  box-shadow: inset 5px 5px 6px #afafaf,
+            inset -5px -5px 6px #ffffff;
+}
+.ds.be {
+  box-shadow: 
+    rgb(0 0 0 / 47%) 0px 4px 6px 0px, /* Drop shadow */
+    inset 5px 5px 6px #afafaf,       /* Inner shadow (bevel effect) */
+    inset -5px -5px 6px #ffffff;    /* Inner highlight (emboss effect) */
+}
