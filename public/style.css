@@ -9,6 +9,12 @@
   --image-margin: 3rem;
   --font-family: "HK Grotesk";
   --font-family-header: "HK Grotesk";
+  
+  --color-blue1: #5598B6;
+  --color-blue2: #124056;
+  
+  --color-orange1: #B12A1F;
+  --color-orange2: #124056;
 }
 
 /* Basic page style resets */
@@ -97,6 +103,8 @@ END Glitch hello-app default styles
 body {
   font-family: HK Grotesk;
   background-color: var(--color-bg);
+  margin: 0;
+  padding: 0;
 }
 
 /* Page structure */
@@ -104,6 +112,7 @@ body {
   min-height: var(--wrapper-height);
   place-items: center;
   margin: 0;
+  padding: 0;
 }
 .content {
   display: flex;
@@ -221,7 +230,6 @@ h2 {
 #teams {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  padding: 10px;
 }
 
 #teams > div {
@@ -232,7 +240,8 @@ h2 {
 }
 #board {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns of equal width */
+  grid-template-rows: repeat(5, 1fr);    /* 5 rows of equal height */
 }
 #board > .item {
    background: white;
