@@ -8,21 +8,20 @@
   </head>
   <body>
     <div class="wrapper">
-      <h1>Welcome to the Game Room</h1>
-      <p>Your nickname: <strong id="nickname">{{nickname}}</strong></p>
+      <div>Your nickname: <strong id="nickname">{{nickname}}</strong></div>
 
-      <h2>Connected Users:</h2>
-      <ul id="userList"></ul>
+      Connected Users:
+      <div id="userList"></div>
 
       <div id="teams">
         <div class="red-item">
           Red Team:
-          <p id="redLeader">Caprain: None</p>
+          <div id="redLeader">Caprain: None</div>
           <ul id="redTeamList"></ul>
         </div>
         <div class="blue-item">
           Blue Team:
-          <p id="blueLeader">Caprain: None</p>
+          <div id="blueLeader">Caprain: None</div>
           <ul id="blueTeamList"></ul>
         </div>
       </div>
@@ -84,9 +83,9 @@
           // Update user list
           userList.innerHTML = ""; // Clear the current list
           (data.activeUsers || []).forEach((user) => {
-            const li = document.createElement("li");
-            li.innerText = user; // Add each user to the list
-            userList.appendChild(li);
+            const sp = document.createElement("span");
+            sp.innerText = user+", "; // Add each user to the list
+            userList.appendChild(sp);
           });
 
           // Update Red Leader and Team
