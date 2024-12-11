@@ -155,6 +155,16 @@
         });
       }
       
+      function getColor(colorName) {
+        const rootStyles = getComputedStyle(document.documentElement);
+
+        // Retrieve the CSS variables
+        const colorGray = rootStyles.getPropertyValue("--color-gray1").trim();
+        const colorRed = rootStyles.getPropertyValue("--color-orange1").trim();
+        const colorDarkGray = rootStyles.getPropertyValue("--color-gray2").trim();
+        const colorBlue = rootStyles.getPropertyValue("--color-blue1").trim();
+        const defaultColor = "white";
+      }
      
       // Event listeners for buttons
       document.getElementById("leaveRoomButton").addEventListener("click", () => {
