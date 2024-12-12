@@ -34,4 +34,44 @@ function switchLeader(nickname, targetTeam, opposingTeam, leaderObjectTo, leader
   if (!targetTeam.includes(nickname)) targetTeam.push(nickname);
 }
 
-module.exports = { broadcastUpdate, switchTeam, switchLeader };
+function checkVotes(words, teamUsers) {
+  const voteCounts = {};
+
+  words.forEach((word, wordIndex) => {
+    word.voters.forEach((voter) => {
+      if (teamUsers.includes(voter)) {
+        if (!voteCounts[wordIndex]) {
+          voteCounts[wordIndex] = new Set();
+        }
+        voteCounts[wordIndex].add(voter);
+      }
+    });
+  });
+
+  for (const [wordIndex, voters] of Object.entries(voteCounts)) {
+    if (voters.size === teamUsers.length) {
+      console.log(`An agreement has been reached on word ${wordIndex}`);
+      return;
+    }
+  }
+
+  console.log("No agreement reached yet.");
+}
+
+function getUserTeam(nickname, redTeamUsers, blueTeamUsers) {
+  let team = null;
+
+  redTeamUsers.forEach((user) => {
+    if (user === nickname) team = "RedTeam";
+  });
+
+  if (!team) {
+    blueTeamUsers.forEach((user) => {
+      if (user === nickname) team = "BlueTeam";
+    });
+  }
+
+  return team;
+}
+
+module.exports = { broadcastUpdate, switchTeam, switchLeader, checkVotes, getUserTeam };
