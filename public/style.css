@@ -129,7 +129,9 @@ ul {
   line-height: 105%;
   margin: 2rem 0 0;
 }
-
+.userList{
+  font-size: 0.6rem;
+}
 /* Very light scaling for our illustration */
 .illo-container {
   display: flex;
