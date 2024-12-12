@@ -7,6 +7,7 @@ class Word {
     this.spell = spell;
     this.voters = voters;
     this.type = type;
+    this.open = false;
   }
 }
 

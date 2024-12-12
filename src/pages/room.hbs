@@ -1,217 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game Room</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <div>Your nickname: <strong id="nickname">{{nickname}}</strong></div>
 
-      Connected Users:
-      <strong id="userList"></strong>
-      <br><br>
-      <div id="teams">
-        <div class="red-item1">
-          Red Team:
-          <div id="redLeader">Caprain: None</div>
-          <ul id="redTeamList"></ul>
-        </div>
-        <div class="blue-item1">
-          Blue Team:
-          <div id="blueLeader">Caprain: None</div>
-          <ul id="blueTeamList"></ul>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <div>Your nickname: <strong id="nickname">{{nickname}}</strong></div>
+
+    Connected Users:
+    <strong id="userList"></strong>
+    <br><br>
+    <div id="teams">
+      <div class="red-item1">
+        Red Team:
+        <div id="redLeader">Caprain: None</div>
+        <ul id="redTeamList"></ul>
       </div>
-      <br>
-
-      <button class="team-btn red-item2 ds be" id="redLeaderButton">Become Red Caprain</button>
-      <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Become Blue Caprain</button>
-      <br><br>
-
-      <button class="team-btn red-item2 ds be" id="redJoinButton">Join Red</button>
-      <button class="team-btn blue-item2 ds be" id="blueJoinButton">Join Blue</button>
-      <br><br>
-      
-       <div id="board">
-          <button class="item" data-button-id="0">0</button>
-          <button class="item" data-button-id="1">1</button>
-          <button class="item" data-button-id="2">2</button>
-          <button class="item" data-button-id="3">3</button>
-          <button class="item" data-button-id="4">4</button>
-          <button class="item" data-button-id="5">5</button>
-          <button class="item" data-button-id="6">6</button>
-          <button class="item" data-button-id="7">7</button>
-          <button class="item" data-button-id="8">8</button>
-          <button class="item" data-button-id="9">9</button>
-          <button class="item" data-button-id="10">10</button>
-          <button class="item" data-button-id="11">11</button>
-          <button class="item" data-button-id="12">12</button>
-          <button class="item" data-button-id="13">13</button>
-          <button class="item" data-button-id="14">14</button>
-          <button class="item" data-button-id="15">15</button>
-          <button class="item" data-button-id="16">16</button>
-          <button class="item" data-button-id="17">17</button>
-          <button class="item" data-button-id="18">18</button>
-          <button class="item" data-button-id="19">19</button>
-          <button class="item" data-button-id="20">20</button>
-          <button class="item" data-button-id="21">21</button>
-          <button class="item" data-button-id="22">22</button>
-          <button class="item" data-button-id="23">23</button>
-          <button class="item" data-button-id="24">24</button>
+      <div class="blue-item1">
+        Blue Team:
+        <div id="blueLeader">Caprain: None</div>
+        <ul id="blueTeamList"></ul>
       </div>
-      
-      <button id="leaveRoomButton">Leave Room</button>
+    </div>
+    <br>
+
+    <button class="team-btn red-item2 ds be" id="redLeaderButton">Become Red Caprain</button>
+    <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Become Blue Caprain</button>
+    <br><br>
+
+    <button class="team-btn red-item2 ds be" id="redJoinButton">Join Red</button>
+    <button class="team-btn blue-item2 ds be" id="blueJoinButton">Join Blue</button>
+    <br><br>
+
+    <div id="board">
+      <button class="item" data-button-id="0">0</button>
+      <button class="item" data-button-id="1">1</button>
+      <button class="item" data-button-id="2">2</button>
+      <button class="item" data-button-id="3">3</button>
+      <button class="item" data-button-id="4">4</button>
+      <button class="item" data-button-id="5">5</button>
+      <button class="item" data-button-id="6">6</button>
+      <button class="item" data-button-id="7">7</button>
+      <button class="item" data-button-id="8">8</button>
+      <button class="item" data-button-id="9">9</button>
+      <button class="item" data-button-id="10">10</button>
+      <button class="item" data-button-id="11">11</button>
+      <button class="item" data-button-id="12">12</button>
+      <button class="item" data-button-id="13">13</button>
+      <button class="item" data-button-id="14">14</button>
+      <button class="item" data-button-id="15">15</button>
+      <button class="item" data-button-id="16">16</button>
+      <button class="item" data-button-id="17">17</button>
+      <button class="item" data-button-id="18">18</button>
+      <button class="item" data-button-id="19">19</button>
+      <button class="item" data-button-id="20">20</button>
+      <button class="item" data-button-id="21">21</button>
+      <button class="item" data-button-id="22">22</button>
+      <button class="item" data-button-id="23">23</button>
+      <button class="item" data-button-id="24">24</button>
     </div>
 
-    <script>
-      const nickname = document.getElementById("nickname").innerText;
-      const userList = document.getElementById("userList");
-      const redLeaderDisplay = document.getElementById("redLeader");
-      const blueLeaderDisplay = document.getElementById("blueLeader");
-      const redTeamList = document.getElementById("redTeamList");
-      const blueTeamList = document.getElementById("blueTeamList");
-      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-      const ws = new WebSocket(`${protocol}://${window.location.host}`);
-      
-      let heartbeatInterval;
+    <button id="leaveRoomButton">Leave Room</button>
+  </div>
 
-      // Send join event on WebSocket connection
-      ws.addEventListener("open", () => {
-        console.log("WebSocket connected. Sending join event.");
-        ws.send(JSON.stringify({ type: "join", nickname }));
-        
-        heartbeatInterval = setInterval(() => {
-          console.log("Sending heartbeat.");
-          ws.send(JSON.stringify({ type: "heartbeat" }));
-        }, 10000); // Send heartbeat every 10 seconds
-      });
-      
-      ws.addEventListener("close", () => {
-        console.warn("WebSocket connection closed.");
-        clearInterval(heartbeatInterval);
-      });
+  <script>
+    const nickname = document.getElementById("nickname").innerText;
+    const userList = document.getElementById("userList");
+    const redLeaderDisplay = document.getElementById("redLeader");
+    const blueLeaderDisplay = document.getElementById("blueLeader");
+    const redTeamList = document.getElementById("redTeamList");
+    const blueTeamList = document.getElementById("blueTeamList");
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${window.location.host}`);
 
-      // Handle incoming WebSocket messages
-      ws.addEventListener("message", (event) => {
+    let heartbeatInterval;
+    let redLeader = null;
+    let blueLeader = null;
+
+    // Send join event on WebSocket connection
+    ws.addEventListener("open", () => {
+      console.log("WebSocket connected. Sending join event.");
+      ws.send(JSON.stringify({ type: "join", nickname }));
+
+      heartbeatInterval = setInterval(() => {
+        console.log("Sending heartbeat.");
+        ws.send(JSON.stringify({ type: "heartbeat" }));
+      }, 10000); // Send heartbeat every 10 seconds
+    });
+
+    ws.addEventListener("close", () => {
+      console.warn("WebSocket connection closed.");
+      clearInterval(heartbeatInterval);
+    });
+
+    // Handle incoming WebSocket messages
+    ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
 
-        if (data.type === "updateUsers") {
-          console.log("Updating user list, Catains, and teams:", data);
+      if (data.type === "updateUsers") {
+        console.log("Updating user list, Catains, and teams:", data);
 
-          // Update user list
-          userList.innerHTML = ""; // Clear the current list
-          (data.activeUsers || []).forEach((user) => {
-            const sp = document.createElement("span");
-            sp.innerText = user+", "; // Add each user to the list
-            userList.appendChild(sp);
-          });
+        redLeader = data.redLeader;
+        blueLeader = data.blueLeader;
+        // Update user list
+        userList.innerHTML = ""; // Clear the current list
+        (data.activeUsers || []).forEach((user) => {
+          const sp = document.createElement("span");
+          sp.innerText = user + ", "; // Add each user to the list
+          userList.appendChild(sp);
+        });
 
-          // Update Red Leader and Team
-          redLeaderDisplay.innerText = `Captain: ${data.redLeader || "None"}`;
-          redTeamList.innerHTML = ""; // Clear the current list
-          (data.redTeamUsers || []).forEach((user, index) => {
-            const li = document.createElement("li");
-            li.innerText = `${user}`;
-            redTeamList.appendChild(li);
-          });
+        // Update Red Leader and Team
+        redLeaderDisplay.innerText = `Captain: ${data.redLeader || "None"}`;
+        redTeamList.innerHTML = ""; // Clear the current list
+        (data.redTeamUsers || []).forEach((user, index) => {
+          const li = document.createElement("li");
+          li.innerText = `${user}`;
+          redTeamList.appendChild(li);
+        });
 
-          // Update Blue Leader and Team
-          blueLeaderDisplay.innerText = `Captain: ${data.blueLeader || "None"}`;
-          blueTeamList.innerHTML = ""; // Clear the current list
-          (data.blueTeamUsers || []).forEach((user, index) => {
-            const li = document.createElement("li");
-            li.innerText = `${user}`;
-            blueTeamList.appendChild(li);
-          });
-        }
-        
-        if (data.type === "updateWords"){
-          console.log("Updating words:", data);
-          updateWord(data.words);
-        }
-      });
-      
-      function updateWord(words) {
-        words.forEach((word) => {
-          const button = document.querySelector(`[data-button-id="${word.index}"]`);
-          if (button) {
-            button.innerText = word.spell; // Update the button's text with the spell
-            
-            word.voters.forEach((voter) => {
-              const brElement = document.createElement("br");
-              button.appendChild(brElement);
-              const voterElement = document.createElement("span");
-              voterElement.textContent = voter;
-              button.appendChild(voterElement);
-              //button.innerText += "\n<span>"+voter+"</span>";
-            });
-            
-            button.style.backgroundColor = getColor(word.type);          
-          }
+        // Update Blue Leader and Team
+        blueLeaderDisplay.innerText = `Captain: ${data.blueLeader || "None"}`;
+        blueTeamList.innerHTML = ""; // Clear the current list
+        (data.blueTeamUsers || []).forEach((user, index) => {
+          const li = document.createElement("li");
+          li.innerText = `${user}`;
+          blueTeamList.appendChild(li);
         });
       }
-      
-      function getColor(type) {
-        let coorName = "";
-        switch (type) {
-          case 0: coorName = "--color-gray2"; break;
-          case 1: coorName = "--color-orange1"; break;
-          case -1: coorName = "--color-black"; break;
-          case 2: coorName = "--color-blue1"; break;
-          default: coorName = ""; break;
-        }
-        
-        const rootStyles = getComputedStyle(document.documentElement);
-        const color = rootStyles.getPropertyValue(coorName).trim();
-        return color;
+
+      if (data.type === "updateWords") {
+        console.log("Updating words:", data);
+        updateWord(data.words);
       }
-     
-      // Event listeners for buttons
-      document.getElementById("leaveRoomButton").addEventListener("click", () => {
-        console.log("Leaving the room.");
-        ws.send(JSON.stringify({ type: "leave", nickname }));
-        window.location.href = "/";
-      });
+    });
 
-      document.getElementById("redLeaderButton").addEventListener("click", () => {
-        console.log(`${nickname} wants to become Red Leader.`);
-        ws.send(JSON.stringify({ type: "redLeader", nickname }));
-      });
+    function updateWord(words) {
+      words.forEach((word) => {
+        const button = document.querySelector(`[data-button-id="${word.index}"]`);
+        if (button) {
+          button.innerText = word.spell;
+          word.voters.forEach((voter) => {
+            const brElement = document.createElement("br");
+            button.appendChild(brElement);
+            const voterElement = document.createElement("span");
+            voterElement.textContent = voter;
+            button.appendChild(voterElement);
+          });
 
-      document.getElementById("blueLeaderButton").addEventListener("click", () => {
-        console.log(`${nickname} wants to become Blue Leader.`);
-        ws.send(JSON.stringify({ type: "blueLeader", nickname }));
-      });
-
-      document.getElementById("redJoinButton").addEventListener("click", () => {
-        console.log(`${nickname} wants to join red.`);
-        ws.send(JSON.stringify({ type: "redJoin", nickname }));
-      });
-
-      document.getElementById("blueJoinButton").addEventListener("click", () => {
-        console.log(`${nickname} wants to join blue.`);
-        ws.send(JSON.stringify({ type: "blueJoin", nickname }));
-      });
-
-      // Notify server on page unload
-      window.addEventListener("beforeunload", () => {
-        ws.send(JSON.stringify({ type: "leave", nickname }));
-      });
-      
-      document.getElementById("board").addEventListener("click", (event) => {
-        if (event.target.tagName === "BUTTON") {
-          const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
-          console.log(`Button with ID ${buttonId} was clicked!`);
-          ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
+          if (word.open == true || nickname === redLeader || nickname === blueLeader) {
+            button.style.backgroundColor = getColor(word.type);
+          }
         }
       });
-      
-    </script>
-  </body>
+    }
+
+    function getColor(type) {
+      let colorName = "";
+      switch (type) {
+        case 0: colorName = "--color-gray2"; break;
+        case 1: colorName = "--color-orange1"; break;
+        case -1: colorName = "--color-black"; break;
+        case 2: colorName = "--color-blue1"; break;
+        default: colorName = ""; break;
+      }
+
+      const rootStyles = getComputedStyle(document.documentElement);
+      const color = rootStyles.getPropertyValue(colorName).trim();
+      return color;
+    }
+
+    // Event listeners for buttons
+    document.getElementById("leaveRoomButton").addEventListener("click", () => {
+      console.log("Leaving the room.");
+      ws.send(JSON.stringify({ type: "leave", nickname }));
+      window.location.href = "/";
+    });
+
+    document.getElementById("redLeaderButton").addEventListener("click", () => {
+      console.log(`${nickname} wants to become Red Leader.`);
+      ws.send(JSON.stringify({ type: "redLeader", nickname }));
+    });
+
+    document.getElementById("blueLeaderButton").addEventListener("click", () => {
+      console.log(`${nickname} wants to become Blue Leader.`);
+      ws.send(JSON.stringify({ type: "blueLeader", nickname }));
+    });
+
+    document.getElementById("redJoinButton").addEventListener("click", () => {
+      console.log(`${nickname} wants to join red.`);
+      ws.send(JSON.stringify({ type: "redJoin", nickname }));
+    });
+
+    document.getElementById("blueJoinButton").addEventListener("click", () => {
+      console.log(`${nickname} wants to join blue.`);
+      ws.send(JSON.stringify({ type: "blueJoin", nickname }));
+    });
+
+    // Notify server on page unload
+    window.addEventListener("beforeunload", () => {
+      ws.send(JSON.stringify({ type: "leave", nickname }));
+    });
+
+    document.getElementById("board").addEventListener("click", (event) => {
+      if (event.target.tagName === "BUTTON") {
+        const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
+        console.log(`Button with ID ${buttonId} was clicked!`);
+        ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
+      }
+    });
+
+  </script>
+</body>
+
 </html>
