@@ -109,8 +109,8 @@
       if (data.type === "updateUsers") {
         console.log("Updating user list, Catains, and teams:", data);
 
-        redLeader = data.redLeader;
-        blueLeader = data.blueLeader;
+        redLeader = data.redLeader.name;
+        blueLeader = data.blueLeader.name;
         // Update user list
         userList.innerHTML = ""; // Clear the current list
         (data.activeUsers || []).forEach((user) => {
@@ -120,7 +120,7 @@
         });
 
         // Update Red Leader and Team
-        redLeaderDisplay.innerText = `Captain: ${data.redLeader || "None"}`;
+        redLeaderDisplay.innerText = `Captain: ${data.redLeader.name || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
         (data.redTeamUsers || []).forEach((user, index) => {
           const li = document.createElement("li");
@@ -129,7 +129,7 @@
         });
 
         // Update Blue Leader and Team
-        blueLeaderDisplay.innerText = `Captain: ${data.blueLeader || "None"}`;
+        blueLeaderDisplay.innerText = `Captain: ${data.blueLeader.name || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
         (data.blueTeamUsers || []).forEach((user, index) => {
           const li = document.createElement("li");
