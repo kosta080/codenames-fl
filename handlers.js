@@ -17,20 +17,20 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           if (index > -1) activeUsers.splice(index, 1);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
         } 
-        else if (type === "redLeader" || type === "blueLeader") {
-          if (type === "redLeader") {
-            redLeader = nickname;
-            switchLeader(nickname, redTeamUsers, blueTeamUsers);
-          }
-          if (type === "blueLeader") {
-            blueLeader = nickname;
-            switchLeader(nickname, blueTeamUsers, redTeamUsers);
-          }
+        else if (type === "redLeader") {
+          switchLeader(nickname, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
-        } 
-        else if (type === "redJoin" || type === "blueJoin") {
-          switchTeam(nickname, type === "redJoin" ? redTeamUsers : blueTeamUsers, 
-                     type === "redJoin" ? blueTeamUsers : redTeamUsers);
+        }
+        else if (type === "blueLeader") {
+          switchLeader(nickname, blueTeamUsers, redTeamUsers, blueLeader, redLeader);
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
+        }
+        else if (type === "redJoin"){
+          switchTeam(nickname, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
+        }
+        else if (type === "blueJoin") {
+          switchTeam(nickname,blueTeamUsers, redTeamUsers, redLeader, blueLeader);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
         } 
         else if (type === "buttonClick") {

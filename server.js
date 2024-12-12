@@ -9,8 +9,8 @@ const wss = new WebSocket.Server({ noServer: true });
 const activeUsers = [];
 const redTeamUsers = [];
 const blueTeamUsers = [];
-let redLeader = null;
-let blueLeader = null;
+let redLeader = {name: null};
+let blueLeader = {name: null};
 
 const wordFilePath = path.join(__dirname, "words.txt");
 const wordList = loadWords(wordFilePath);
