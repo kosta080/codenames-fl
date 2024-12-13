@@ -74,6 +74,7 @@
     </div>
 
     <button id="leaveRoomButton">Leave Room</button>
+    <button id="leaveTeamButton">Leave Team</button>
   </div>
 
   <script>
@@ -93,6 +94,14 @@
     let heartbeatInterval;
     let redLeader = null;
     let blueLeader = null;
+
+    //turn Enum
+    const Turn = Object.freeze({
+        RED: 1,
+        BLUE: 2,
+        NONE: 0
+    });
+    let turn = Turn.NONE;
 
     // Send join event on WebSocket connection
     ws.addEventListener("open", () => {
@@ -137,6 +146,7 @@
           userList.appendChild(sp);
         });
 
+        turn = Turn.NONE; //turn TBD
         // Update Red Leader and Team
         redLeaderDisplay.innerText = `Captain: ${data.redLeader.name || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
@@ -146,9 +156,7 @@
           redTeamList.appendChild(li);
           if (nickname === user)
           {
-            console.log("im red");
-            wrapper.classList.remove("bg-red");
-            wrapper.classList.add("bg-blue");
+            turn = Turn.RED;
           }
         });
         // Update Blue Leader and Team
@@ -160,12 +168,24 @@
           blueTeamList.appendChild(li);
           if (nickname === user)
           {
-            console.log("im blue");
-            wrapper.classList.remove("bg-blue");
-            wrapper.classList.add("bg-red");
+            turn = Turn.BLUE;
           }
         });
 
+        switch (turn) {
+          case Turn.RED:
+            wrapper.classList.remove("bg-blue");
+            wrapper.classList.add("bg-red");
+            break;
+          case Turn.BLUE:
+            wrapper.classList.remove("bg-red");
+            wrapper.classList.add("bg-blue");
+            break;
+          default:
+            wrapper.classList.remove("bg-red");
+            wrapper.classList.remove("bg-blue");
+            break;
+        }
 
       }
 
@@ -216,8 +236,12 @@
     // Event listeners for buttons
     document.getElementById("leaveRoomButton").addEventListener("click", () => {
       console.log("Leaving the room.");
-      ws.send(JSON.stringify({ type: "leave", nickname }));
+      ws.send(JSON.stringify({ type: "leaveRoom", nickname }));
       window.location.href = "/";
+    });
+     document.getElementById("leaveTeamButton").addEventListener("click", () => {
+      console.log("Leaving Team.");
+      ws.send(JSON.stringify({ type: "leaveTeam", nickname }));
     });
 
     document.getElementById("redLeaderButton").addEventListener("click", () => {

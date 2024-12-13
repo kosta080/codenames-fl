@@ -10,10 +10,18 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
         if (type === "join") {
           if (!activeUsers.includes(nickname)) activeUsers.push(nickname);
         } 
-        else if (type === "leave") {
+        else if (type === "leaveRoom") {
           const index = activeUsers.indexOf(nickname);
           if (index > -1) activeUsers.splice(index, 1);
-        } 
+        }
+        else if (type === "leaveTeam") {
+          console.log(nickname);
+          let index = -1;
+          index = redTeamUsers.indexOf(nickname);
+          if (index > -1) redTeamUsers.splice(index, 1);
+          index = blueTeamUsers.indexOf(nickname);  
+          if (index > -1) blueTeamUsers.splice(index, 1);
+        }
         else if (type === "redLeader") {
           switchLeader(nickname, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
         }
@@ -55,6 +63,7 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
 
 
         if (type != "heartbeat") {
+          console.log("broadcastUpdate")
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers, turn });
           broadcastUpdate(wss, { type: "updateWords", words });
         }
