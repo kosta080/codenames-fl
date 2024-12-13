@@ -37,13 +37,15 @@
     </div>
     <br>
 
-    <button class="team-btn red-item2 ds be" id="redLeaderButton">Become Red Caprain</button>
-    <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Become Blue Caprain</button>
-    <br><br>
+    <div id="team-btns">
+      <button class="team-btn red-item2 ds be" id="redLeaderButton">Become Red Caprain</button>
+      <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Become Blue Caprain</button>
+      <br><br>
 
-    <button class="team-btn red-item2 ds be" id="redJoinButton">Join Red</button>
-    <button class="team-btn blue-item2 ds be" id="blueJoinButton">Join Blue</button>
-    <br><br>
+      <button class="team-btn red-item2 ds be" id="redJoinButton">Join Red</button>
+      <button class="team-btn blue-item2 ds be" id="blueJoinButton">Join Blue</button>
+      <br><br>
+    </div>
 
     <div id="board">
       <button class="item" data-button-id="0">0</button>
@@ -87,6 +89,7 @@
     const teamBlue = document.getElementById("team-blue");
     const teamRed = document.getElementById("team-red");
     const wrapper = document.getElementById("wrapper");
+    const teamBtns = document.getElementById("team-btns");
 
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const ws = new WebSocket(`${protocol}://${window.location.host}`);
@@ -95,13 +98,14 @@
     let redLeader = null;
     let blueLeader = null;
 
-    //turn Enum
-    const Turn = Object.freeze({
+    //team Enum
+    const Team = Object.freeze({
         RED: 1,
         BLUE: 2,
         NONE: 0
     });
-    let turn = Turn.NONE;
+    let team = Team.NONE;
+    let turn = Team.NONE;
 
     // Send join event on WebSocket connection
     ws.addEventListener("open", () => {
@@ -127,12 +131,14 @@
         console.log("Updating user list, Catains, and teams:", data);
 
         if (data.turn.blueTurn) {
-          teamBlue.classList.add("glowOutline");
-          teamRed.classList.remove("glowOutline");
+          //teamBlue.classList.add("glowOutline");
+          //teamRed.classList.remove("glowOutline");
+          turn = Team.BLUE;
         }
         if (data.turn.redTurn) {
-          teamBlue.classList.remove("glowOutline");
-          teamRed.classList.add("glowOutline");
+          //teamBlue.classList.remove("glowOutline");
+          //teamRed.classList.add("glowOutline");
+          turn = Team.RED;
         }
 
         redLeader = data.redLeader.name;
@@ -146,44 +152,64 @@
           userList.appendChild(sp);
         });
 
-        turn = Turn.NONE; //turn TBD
+        team = Team.NONE; //turn TBD
         // Update Red Leader and Team
-        redLeaderDisplay.innerText = `Captain: ${data.redLeader.name || "None"}`;
+        redLeaderDisplay.innerText = `Captain: ${redLeader || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
         (data.redTeamUsers || []).forEach((user, index) => {
+          if (user === redLeader) return;
           const li = document.createElement("li");
           li.innerText = `${user}`;
           redTeamList.appendChild(li);
           if (nickname === user)
           {
-            turn = Turn.RED;
+            team = Team.RED;
           }
         });
         // Update Blue Leader and Team
-        blueLeaderDisplay.innerText = `Captain: ${data.blueLeader.name || "None"}`;
+        blueLeaderDisplay.innerText = `Captain: ${blueLeader || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
         (data.blueTeamUsers || []).forEach((user, index) => {
+          if (user === blueLeader) return;
           const li = document.createElement("li");
           li.innerText = `${user}`;
           blueTeamList.appendChild(li);
           if (nickname === user)
           {
-            turn = Turn.BLUE;
+            team = Team.BLUE;
           }
         });
 
-        switch (turn) {
-          case Turn.RED:
+        switch (team) {
+          case Team.RED:
             wrapper.classList.remove("bg-blue");
             wrapper.classList.add("bg-red");
+            setTeamBtnsActive(false);
             break;
-          case Turn.BLUE:
+          case Team.BLUE:
             wrapper.classList.remove("bg-red");
             wrapper.classList.add("bg-blue");
+            setTeamBtnsActive(false);
             break;
           default:
             wrapper.classList.remove("bg-red");
             wrapper.classList.remove("bg-blue");
+            setTeamBtnsActive(true);
+            break;
+        }
+
+        switch (turn) {
+          case Team.RED:
+            teamBlue.classList.remove("glowOutline");
+            teamRed.classList.add("glowOutline");
+            break;
+          case Team.BLUE:
+            teamRed.classList.remove("glowOutline");
+            teamBlue.classList.add("glowOutline");
+            break;
+          default:
+            teamRed.classList.remove("glowOutline");
+            teamBlue.classList.remove("glowOutline");
             break;
         }
 
@@ -211,11 +237,15 @@
           console.log(`--- ${nickname} r: ${redLeader} b: ${blueLeader}`);
           if (word.open == true || nickname === redLeader || nickname === blueLeader) {
             button.style.backgroundColor = getColor(word.type);
-          }else{
+          } else {
             button.style.backgroundColor = getColor(null);
           }
         }
       });
+    }
+
+    function setTeamBtnsActive(state) {
+      teamBtns.style.display = state ? "inline" : "none";
     }
 
     function getColor(type) {
@@ -277,11 +307,12 @@
     });
 
     document.getElementById("board").addEventListener("click", (event) => {
-      if (event.target.tagName === "BUTTON") {
-        const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
-        console.log(`Button with ID ${buttonId} was clicked!`);
-        ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
-      }
+      if (event.target.tagName != "BUTTON") return;
+      if (team != turn) return;
+      if (nickname === redLeader || nickname === blueLeader) return;
+      const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
+      console.log(`Button with ID ${buttonId} was clicked!`);
+      ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
     });
 
   </script>

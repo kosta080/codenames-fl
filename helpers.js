@@ -49,7 +49,7 @@ function checkVotes(words, teamUsers) {
   });
 
   for (const [wordIndex, voters] of Object.entries(voteCounts)) {
-    if (voters.size === teamUsers.length) {
+    if (voters.size === teamUsers.length-1) {
       console.log(`An agreement has been reached on word ${wordIndex}`);
       return;
     }
