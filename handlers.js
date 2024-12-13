@@ -1,6 +1,6 @@
 const { broadcastUpdate, switchTeam, switchLeader, checkVotes, getUserTeam } = require("./helpers");
 
-function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader) {
+function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn) {
   wss.on("connection", (ws) => {
     ws.on("message", (message) => {
       try {
@@ -43,11 +43,19 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           } else {
             checkVotes(words, blueTeamUsers);
           }
-
+        }
+        else if (type === "redTurn") {
+          turn.blueTurn = false;
+          turn.redTurn = true;
+        }
+        else if (type === "blueTurn") {
+          turn.blueTurn = true;
+          turn.redTurn = false;
         }
 
+
         if (type != "heartbeat") {
-          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers });
+          broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers, turn });
           broadcastUpdate(wss, { type: "updateWords", words });
         }
         

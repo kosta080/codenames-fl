@@ -11,6 +11,7 @@ const redTeamUsers = [];
 const blueTeamUsers = [];
 let redLeader = { name: null };
 let blueLeader = { name: null };
+let turn = {blueTurn: false, redTurn: false};
 
 const wordFilePath = path.join(__dirname, "words.txt");
 const wordList = loadWords(wordFilePath);
@@ -25,7 +26,7 @@ for (let i = 0; i <= 24; i++) {
   
 }
 
-setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
+setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn);
 
 mainRoutes.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" }, (err, address) => {
   if (err) process.exit(1);

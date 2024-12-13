@@ -13,20 +13,24 @@
 </head>
 
 <body>
-  <div class="wrapper">
-    <div>Your nickname: <strong id="nickname">{{nickname}}</strong></div>
+  <div id="wrapper" class="wrapper">
+    <div>Your nickname: <strong id="nicknameElement">{{nickname}}</strong></div>
 
     Connected Users:
     <strong id="userList"></strong>
     <br><br>
+
+    <div id="turns">
+      <div id="redTurnButton" class="turnBtn red-item2 ds be">▶</div>
+      <div id="blueTurnButton" class="turnBtn blue-item2 ds be">▶</div>
+    </div>
+
     <div id="teams">
-      <div class="red-item1">
-        Red Team:
+      <div id="team-red" class="red-item1">Red Team:
         <div id="redLeader">Caprain: None</div>
         <ul id="redTeamList"></ul>
       </div>
-      <div class="blue-item1">
-        Blue Team:
+      <div id="team-blue" class="blue-item1">Blue Team:
         <div id="blueLeader">Caprain: None</div>
         <ul id="blueTeamList"></ul>
       </div>
@@ -73,12 +77,16 @@
   </div>
 
   <script>
-    const nickname = document.getElementById("nickname").innerText;
+    const nickname = document.getElementById("nicknameElement").innerText;
     const userList = document.getElementById("userList");
     const redLeaderDisplay = document.getElementById("redLeader");
     const blueLeaderDisplay = document.getElementById("blueLeader");
     const redTeamList = document.getElementById("redTeamList");
     const blueTeamList = document.getElementById("blueTeamList");
+    const teamBlue = document.getElementById("team-blue");
+    const teamRed = document.getElementById("team-red");
+    const wrapper = document.getElementById("wrapper");
+
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const ws = new WebSocket(`${protocol}://${window.location.host}`);
 
@@ -109,8 +117,18 @@
       if (data.type === "updateUsers") {
         console.log("Updating user list, Catains, and teams:", data);
 
+        if (data.turn.blueTurn) {
+          teamBlue.classList.add("glowOutline");
+          teamRed.classList.remove("glowOutline");
+        }
+        if (data.turn.redTurn) {
+          teamBlue.classList.remove("glowOutline");
+          teamRed.classList.add("glowOutline");
+        }
+
         redLeader = data.redLeader.name;
         blueLeader = data.blueLeader.name;
+
         // Update user list
         userList.innerHTML = ""; // Clear the current list
         (data.activeUsers || []).forEach((user) => {
@@ -126,8 +144,13 @@
           const li = document.createElement("li");
           li.innerText = `${user}`;
           redTeamList.appendChild(li);
+          if (nickname === user)
+          {
+            console.log("im red");
+            wrapper.classList.remove("bg-red");
+            wrapper.classList.add("bg-blue");
+          }
         });
-
         // Update Blue Leader and Team
         blueLeaderDisplay.innerText = `Captain: ${data.blueLeader.name || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
@@ -135,7 +158,15 @@
           const li = document.createElement("li");
           li.innerText = `${user}`;
           blueTeamList.appendChild(li);
+          if (nickname === user)
+          {
+            console.log("im blue");
+            wrapper.classList.remove("bg-blue");
+            wrapper.classList.add("bg-red");
+          }
         });
+
+
       }
 
       if (data.type === "updateWords") {
@@ -207,6 +238,13 @@
     document.getElementById("blueJoinButton").addEventListener("click", () => {
       console.log(`${nickname} wants to join blue.`);
       ws.send(JSON.stringify({ type: "blueJoin", nickname }));
+    });
+
+    document.getElementById("redTurnButton").addEventListener("click", () => {
+      ws.send(JSON.stringify({ type: "redTurn", nickname }));
+    });
+    document.getElementById("blueTurnButton").addEventListener("click", () => {
+      ws.send(JSON.stringify({ type: "blueTurn", nickname }));
     });
 
     // Notify server on page unload
