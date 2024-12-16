@@ -1,15 +1,20 @@
+<!-- room.hbs -->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content= "width=device-width, user-scalable=no">
   <title>Game Room</title>
   <link rel="icon" href="/icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/effects/exp.css" />
+
 </head>
 
 <body>
@@ -77,8 +82,11 @@
 
     <button id="leaveRoomButton">Leave Room</button>
     <button id="leaveTeamButton">Leave Team</button>
+    <button id="restartGameButton">Restart Game</button>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/effects/exp.js"></script>
   <script>
     const nickname = document.getElementById("nicknameElement").innerText;
     const userList = document.getElementById("userList");
@@ -97,6 +105,8 @@
     let heartbeatInterval;
     let redLeader = null;
     let blueLeader = null;
+
+    let user_list = "_";
 
     //team Enum
     const Team = Object.freeze({
@@ -125,11 +135,12 @@
 
     // Handle incoming WebSocket messages
     ws.addEventListener("message", (event) => {
+      console.log("137");
       const data = JSON.parse(event.data);
-
+      console.log("139");
       if (data.type === "updateUsers") {
         console.log("Updating user list, Catains, and teams:", data);
-
+        console.log("142");
         if (data.turn.blueTurn) {
           //teamBlue.classList.add("glowOutline");
           //teamRed.classList.remove("glowOutline");
@@ -140,15 +151,19 @@
           //teamRed.classList.add("glowOutline");
           turn = Team.RED;
         }
-
+        console.log("153");
         redLeader = data.redLeader.name;
         blueLeader = data.blueLeader.name;
 
+        console.log("activeUsers " + data.activeUsers);
         // Update user list
         userList.innerHTML = ""; // Clear the current list
+        user_list = "";
         (data.activeUsers || []).forEach((user) => {
           const sp = document.createElement("span");
           sp.innerText = user + ", "; // Add each user to the list
+          user_list += user + ", ";
+          console.log("--- " +user);
           userList.appendChild(sp);
         });
 
@@ -157,7 +172,10 @@
         redLeaderDisplay.innerText = `Captain: ${redLeader || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
         (data.redTeamUsers || []).forEach((user, index) => {
-          if (user === redLeader) return;
+          if (user === redLeader) {
+            team = Team.RED;
+            return;
+          }
           const li = document.createElement("li");
           li.innerText = `${user}`;
           redTeamList.appendChild(li);
@@ -170,9 +188,15 @@
         blueLeaderDisplay.innerText = `Captain: ${blueLeader || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
         (data.blueTeamUsers || []).forEach((user, index) => {
-          if (user === blueLeader) return;
+          console.log("--->"+user);
+          if (user === blueLeader) {
+            console.log("1>");
+            team = Team.BLUE;
+            return;
+          }
           const li = document.createElement("li");
           li.innerText = `${user}`;
+          console.log("2>");
           blueTeamList.appendChild(li);
           if (nickname === user)
           {
@@ -219,9 +243,28 @@
         console.log("Updating words:", data);
         updateWord(data.words);
       }
+      if (data.type === "updateWordsAnim") {
+        console.log("Updating words Anim:", data);
+        newWord(data.words);
+      }
+
     });
 
+    var wordsCache;
+    function newWord(words) {
+      if (wordsCache.length < 1) return;
+      for (let i=0; i < wordsCache.length; i++) {
+        if (wordsCache[i].open != words[i].open)
+        {
+          console.log(i+"is new");
+          const btn = document.querySelector(`[data-button-id="${words[i].index}"]`);
+          explodeObj(btn);
+          break;
+        }
+      }
+    }
     function updateWord(words) {
+      wordsCache = words;
       words.forEach((word) => {
         const button = document.querySelector(`[data-button-id="${word.index}"]`);
         if (button) {
@@ -269,9 +312,15 @@
       ws.send(JSON.stringify({ type: "leaveRoom", nickname }));
       window.location.href = "/";
     });
-     document.getElementById("leaveTeamButton").addEventListener("click", () => {
+
+    document.getElementById("leaveTeamButton").addEventListener("click", () => {
       console.log("Leaving Team.");
       ws.send(JSON.stringify({ type: "leaveTeam", nickname }));
+    });
+
+    document.getElementById("restartGameButton").addEventListener("click", () => {
+      console.log("Restart Game.");
+      ws.send(JSON.stringify({ type: "restartGame", nickname }));
     });
 
     document.getElementById("redLeaderButton").addEventListener("click", () => {

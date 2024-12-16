@@ -105,6 +105,7 @@ body {
 
 /* Page structure */
 .wrapper {
+  background-color: #675e56;
   min-height: var(--wrapper-height);
   place-items: center;
   margin: 0;

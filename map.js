@@ -1,18 +1,28 @@
+//map.js
 
 function generateMap() {
-  let map = new Array(25);
+  let map = [0,1,2,0,2,1,1,2,1,1,2,2,0,0,0,2,0,-1,1,2,1,2,0,1,1];
   
-  for (let i = 0; i < map.length; i++) {
-    map[i] = 0; // Or any other default value
+  for (let i=0;i<100;i++){
+    Switch(map, getRandomPair());
   }
-  
-  map[0] = 0;
-  map[1] = 1
-  map[2] = -1
-  map[3] = 1
-  map[4] = 2
-  
+
   return map;
+}
+
+function Switch(map,pair){
+  let store =  map[pair[0]];
+  map[pair[0]] = map[pair[1]];
+  map[pair[1]] = store;
+}
+
+function getRandomPair() {
+  let v1 = Math.floor(Math.random() * 25);
+  let v2 = Math.floor(Math.random() * 25);
+  while (v1 == v2) {
+    v2 = Math.floor(Math.random() * 25);
+  }
+  return [v1,v2];
 }
 
 module.exports = generateMap;

@@ -1,7 +1,10 @@
+//helpers.js
 const WebSocket = require("ws");
 
 function broadcastUpdate(wss, data) {
+ // console.trace("broadcastUpdate called");
   const payload = JSON.stringify(data);
+
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(payload);
@@ -51,11 +54,12 @@ function checkVotes(words, teamUsers) {
   for (const [wordIndex, voters] of Object.entries(voteCounts)) {
     if (voters.size === teamUsers.length-1) {
       console.log(`An agreement has been reached on word ${wordIndex}`);
+      words[wordIndex].open = true;
       return;
     }
   }
 
-  console.log("No agreement reached yet.");
+  console.log("No agreement reached yet."+ voters.size + " / " + teamUsers.length-1 + "voters");
 }
 
 function getUserTeam(nickname, redTeamUsers, blueTeamUsers) {

@@ -1,6 +1,7 @@
+//handlers.js
 const { broadcastUpdate, switchTeam, switchLeader, checkVotes, getUserTeam } = require("./helpers");
 
-function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn) {
+function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn, ResetGame) {
   wss.on("connection", (ws) => {
     ws.on("message", (message) => {
       try {
@@ -9,6 +10,7 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
 
         if (type === "join") {
           if (!activeUsers.includes(nickname)) activeUsers.push(nickname);
+          ws.nickname = nickname;
         } 
         else if (type === "leaveRoom") {
           const index = activeUsers.indexOf(nickname);
@@ -21,6 +23,9 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           if (index > -1) redTeamUsers.splice(index, 1);
           index = blueTeamUsers.indexOf(nickname);  
           if (index > -1) blueTeamUsers.splice(index, 1);
+        }
+        else if (type === "restartGame") {
+          ResetGame();
         }
         else if (type === "redLeader") {
           switchLeader(nickname, redTeamUsers, blueTeamUsers, redLeader, blueLeader);
@@ -51,6 +56,7 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           } else {
             checkVotes(words, blueTeamUsers);
           }
+          broadcastUpdate(wss, { type: "updateWordsAnim", words });
         }
         else if (type === "redTurn") {
           turn.blueTurn = false;
@@ -62,8 +68,8 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
         }
 
 
-        if (type != "heartbeat") {
-          console.log("broadcastUpdate")
+        if (type != "heartbeat" && type != "restartGame") {
+          console.log("1---> "+ activeUsers);
           broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers, turn });
           broadcastUpdate(wss, { type: "updateWords", words });
         }
@@ -75,8 +81,18 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
     });
 
     ws.on("close", () => {
+      if (!ws.nickname) {
+        console.warn("Closing connection without a nickname set.");
+        return;
+      }
+      console.log(ws.nickname + " Left");
       const index = activeUsers.indexOf(ws.nickname);
       if (index > -1) activeUsers.splice(index, 1);
+      console.log("2---> "+ activeUsers);
+      if (redLeader.name === ws.nickname)
+        redLeader.name = null;
+      if (blueLeader.name === ws.nickname)
+        blueLeader.name = null;
       broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
     });
   });
