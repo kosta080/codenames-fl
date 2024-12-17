@@ -2,7 +2,9 @@
 const WebSocket = require("ws");
 
 function broadcastUpdate(wss, data) {
- // console.trace("broadcastUpdate called");
+
+  console.log("broadcasting "+data.type);
+
   const payload = JSON.stringify(data);
 
   wss.clients.forEach((client) => {
@@ -30,8 +32,11 @@ function switchTeam(nickname, targetTeam, opposingTeam, redLeader, blueLeader) {
 }
 
 function switchLeader(nickname, targetTeam, opposingTeam, leaderObjectTo, leaderObjectFrom) {
+  if (leaderObjectFrom.name === leaderObjectTo.name) {
+
+    leaderObjectFrom.name = null;
+  }
   leaderObjectTo.name = nickname;
-  leaderObjectFrom.name = null;
   const opposingIndex = opposingTeam.indexOf(nickname);
   if (opposingIndex > -1) opposingTeam.splice(opposingIndex, 1); 
   if (!targetTeam.includes(nickname)) targetTeam.push(nickname);

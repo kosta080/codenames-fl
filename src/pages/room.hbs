@@ -114,6 +114,7 @@
         BLUE: 2,
         NONE: 0
     });
+
     let team = Team.NONE;
     let turn = Team.NONE;
 
@@ -167,43 +168,31 @@
           userList.appendChild(sp);
         });
 
-        team = Team.NONE; //turn TBD
+      
+        team = getTeam(data);
+
         // Update Red Leader and Team
         redLeaderDisplay.innerText = `Captain: ${redLeader || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
         (data.redTeamUsers || []).forEach((user, index) => {
-          if (user === redLeader) {
-            team = Team.RED;
-            return;
-          }
+          if (user === redLeader) return;
           const li = document.createElement("li");
           li.innerText = `${user}`;
           redTeamList.appendChild(li);
-          if (nickname === user)
-          {
-            team = Team.RED;
-          }
         });
+
         // Update Blue Leader and Team
         blueLeaderDisplay.innerText = `Captain: ${blueLeader || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
         (data.blueTeamUsers || []).forEach((user, index) => {
-          console.log("--->"+user);
-          if (user === blueLeader) {
-            console.log("1>");
-            team = Team.BLUE;
-            return;
-          }
+          if (user === blueLeader) return;
           const li = document.createElement("li");
           li.innerText = `${user}`;
-          console.log("2>");
           blueTeamList.appendChild(li);
-          if (nickname === user)
-          {
-            team = Team.BLUE;
-          }
         });
 
+        
+        
         switch (team) {
           case Team.RED:
             wrapper.classList.remove("bg-blue");
@@ -280,11 +269,17 @@
           console.log(`--- ${nickname} r: ${redLeader} b: ${blueLeader}`);
           if (word.open == true || nickname === redLeader || nickname === blueLeader) {
             button.style.backgroundColor = getColor(word.type);
+            setBtnHiddenState(button, word.open);
           } else {
             button.style.backgroundColor = getColor(null);
           }
         }
       });
+    }
+
+    function setBtnHiddenState(btn, open) {
+      if (!open) btn.classList.add("hidden");
+      else btn.classList.remove("hidden");
     }
 
     function setTeamBtnsActive(state) {
@@ -304,6 +299,20 @@
       const rootStyles = getComputedStyle(document.documentElement);
       const color = rootStyles.getPropertyValue(colorName).trim();
       return color;
+    }
+
+    function getTeam(data) {
+      if (nickname === redLeader) return Team.RED;
+      if (nickname === blueLeader) return Team.BLUE;
+      
+      for (const user of data.redTeamUsers || []) {
+        if (user === nickname) return Team.RED; // Use RED enum here
+      }
+
+      for (const user of data.blueTeamUsers || []) {
+        if (user === nickname) return Team.BLUE; // Use BLUE enum here
+    }
+      return null;
     }
 
     // Event listeners for buttons

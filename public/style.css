@@ -268,6 +268,7 @@ h2 {
     background: var(--color-gray1);
     height: 20vw;
     width: 20vw;
+    height: 12vw;
     padding: 0px;
     padding-top: 4px;
     display: flex;
@@ -280,6 +281,10 @@ h2 {
     align-content: center;
     align-items: center;
     font-size: 0.8rem;
+}
+
+.hidden {
+  background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) 4px, transparent 5px, transparent 12px) !important;
 }
 
 .item > span{

@@ -21,33 +21,42 @@ let map = [];
 let words = [];
 
 function ResetGame(){
-  map = generateMap();
   activeUsers = [];
   redTeamUsers = [];
   blueTeamUsers = [];
   redLeader = { name: null };
   blueLeader = { name: null };
   turn = {blueTurn: false, redTurn: false};
+
   wordList = loadWords(wordFilePath);
+  if (wordList && wordList.length > 10)  console.log("+ wordList Loaded");
+  else console.log("- wordList Loading problem");
+
   map = generateMap();
+  if (map && map.length > 10)  console.log("+ Map generated");
+  else console.log("- Map generation problem");
+
   words = [];
   for (let i = 0; i <= 24; i++) {
     if (i >= wordList.length) 
       throw new Error("Not enough unique words in the list to fill the game.");
     words.push(new Word(i, wordList[i], map[i], []));
   }
+  if (wordList && wordList.length > 10)  console.log("+ words set");
+  else console.log("- words not set");
+
   console.log("Game reset successfully.");
   
   // Broadcast updated state to all clients
-  console.log("3---> "+ activeUsers);
+  console.log("activeUsers: "+ activeUsers);
   broadcastUpdate(wss, {type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers, turn });
   broadcastUpdate(wss, { type: "updateWords", words });
 }
 
 
+ResetGame();
 setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn, ResetGame);
 
-ResetGame();
 
 mainRoutes.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" }, (err, address) => {
   if (err) process.exit(1);

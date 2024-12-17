@@ -1,4 +1,3 @@
-//handlers.js
 const { broadcastUpdate, switchTeam, switchLeader, checkVotes, getUserTeam } = require("./helpers");
 
 function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamUsers, redLeader, blueLeader, turn, ResetGame) {
@@ -40,13 +39,24 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           switchTeam(nickname, blueTeamUsers, redTeamUsers, redLeader, blueLeader);
         } 
         else if (type === "buttonClick") {
+          // Validate buttonId
+          if (typeof buttonId !== "number" || buttonId < 0 || buttonId >= words.length) {
+            console.error("Invalid buttonId:", buttonId);
+            return; // Stop execution if buttonId is invalid
+          }
+
+          if (!words[buttonId]) {
+            console.error("Word at buttonId is undefined");
+            return;
+          }
+
           words.forEach((word, index) => {
             if (index !== buttonId && word.voters.includes(nickname)) {
               word.voters = word.voters.filter(voter => voter !== nickname);
             }
           });
 
-          if (!words[buttonId].voters.includes(nickname)) {
+          if (Array.isArray(words[buttonId].voters) && !words[buttonId].voters.includes(nickname)) {
             words[buttonId].voters.push(nickname);
           }
 
@@ -89,10 +99,8 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
       const index = activeUsers.indexOf(ws.nickname);
       if (index > -1) activeUsers.splice(index, 1);
       console.log("2---> "+ activeUsers);
-      if (redLeader.name === ws.nickname)
-        redLeader.name = null;
-      if (blueLeader.name === ws.nickname)
-        blueLeader.name = null;
+      //if (redLeader.name === ws.nickname) redLeader.name = null;
+      //if (blueLeader.name === ws.nickname) blueLeader.name = null;
       broadcastUpdate(wss, { type: "updateUsers", activeUsers, redLeader, blueLeader });
     });
   });
