@@ -265,22 +265,21 @@ h2 {
   grid-template-rows: repeat(5, 1fr);    /* 5 rows of equal height */
 }
 #board > .item {
-    background: var(--color-gray1);
-    height: 20vw;
-    width: 20vw;
-    height: 12vw;
-    padding: 0px;
-    padding-top: 4px;
-    display: flex;
-    justify-content: flex-start;
-    color: white;
-    font-weight: bold;
-    text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-    font-size: 0.8rem;
+  background: var(--color-gray1);
+  height: 20vw;
+  width: 20vw;
+  height: 12vw;
+  padding: 0px;
+  padding-top: 4px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  font-size: 0.8rem;
 }
 
 .hidden {

@@ -22,6 +22,8 @@ function setupWebSocketHandlers(wss, words, activeUsers, redTeamUsers, blueTeamU
           if (index > -1) redTeamUsers.splice(index, 1);
           index = blueTeamUsers.indexOf(nickname);  
           if (index > -1) blueTeamUsers.splice(index, 1);
+          if (nickname == blueLeader.name) blueLeader.name = null;
+          if (nickname == redLeader.name) redLeader.name = null;
         }
         else if (type === "restartGame") {
           ResetGame();

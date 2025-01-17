@@ -21,12 +21,13 @@ let map = [];
 let words = [];
 
 function ResetGame(){
-  activeUsers = [];
-  redTeamUsers = [];
-  blueTeamUsers = [];
-  redLeader = { name: null };
-  blueLeader = { name: null };
-  turn = {blueTurn: false, redTurn: false};
+  activeUsers.length = 0;
+  redTeamUsers.length = 0;
+  blueTeamUsers.length = 0;
+  redLeader.name = null;
+  blueLeader.name = null;
+  turn.blueTurn = false;
+  turn.redTurn= false;
 
   wordList = loadWords(wordFilePath);
   if (wordList && wordList.length > 10)  console.log("+ wordList Loaded");
@@ -36,7 +37,7 @@ function ResetGame(){
   if (map && map.length > 10)  console.log("+ Map generated");
   else console.log("- Map generation problem");
 
-  words = [];
+  words.length = 0;
   for (let i = 0; i <= 24; i++) {
     if (i >= wordList.length) 
       throw new Error("Not enough unique words in the list to fill the game.");
@@ -49,6 +50,8 @@ function ResetGame(){
   
   // Broadcast updated state to all clients
   console.log("activeUsers: "+ activeUsers);
+  console.log("redTeamUsers: "+ redTeamUsers);
+  console.log("blueTeamUsers: "+ blueTeamUsers);
   broadcastUpdate(wss, {type: "updateUsers", activeUsers, redLeader, blueLeader, redTeamUsers, blueTeamUsers, turn });
   broadcastUpdate(wss, { type: "updateWords", words });
 }

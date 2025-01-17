@@ -32,11 +32,11 @@
 
     <div id="teams">
       <div id="team-red" class="red-item1">Red Team:
-        <div id="redLeader">Caprain: None</div>
+        <div id="redLeader"></div>
         <ul id="redTeamList"></ul>
       </div>
       <div id="team-blue" class="blue-item1">Blue Team:
-        <div id="blueLeader">Caprain: None</div>
+        <div id="blueLeader"></div>
         <ul id="blueTeamList"></ul>
       </div>
     </div>
@@ -174,6 +174,8 @@
         // Update Red Leader and Team
         redLeaderDisplay.innerText = `Captain: ${redLeader || "None"}`;
         redTeamList.innerHTML = ""; // Clear the current list
+        console.log("--->redTeamUsers");
+        console.log(data.redTeamUsers);
         (data.redTeamUsers || []).forEach((user, index) => {
           if (user === redLeader) return;
           const li = document.createElement("li");
@@ -184,6 +186,8 @@
         // Update Blue Leader and Team
         blueLeaderDisplay.innerText = `Captain: ${blueLeader || "None"}`;
         blueTeamList.innerHTML = ""; // Clear the current list
+        console.log("--->blueTeamUsers");
+        console.log(data.blueTeamUsers);
         (data.blueTeamUsers || []).forEach((user, index) => {
           if (user === blueLeader) return;
           const li = document.createElement("li");
@@ -259,8 +263,8 @@
         if (button) {
           button.innerText = word.spell;
           word.voters.forEach((voter) => {
-            const brElement = document.createElement("br");
-            button.appendChild(brElement);
+            //const brElement = document.createElement("br");
+            //button.appendChild(brElement);
             const voterElement = document.createElement("span");
             voterElement.textContent = voter;
             button.appendChild(voterElement);
@@ -272,6 +276,7 @@
             setBtnHiddenState(button, word.open);
           } else {
             button.style.backgroundColor = getColor(null);
+            setBtnHiddenState(button, true);
           }
         }
       });

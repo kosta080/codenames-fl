@@ -46,6 +46,8 @@ function checkVotes(words, teamUsers) {
   const voteCounts = {};
 
   words.forEach((word, wordIndex) => {
+    if (!word || !word.voters) return;
+
     word.voters.forEach((voter) => {
       if (teamUsers.includes(voter)) {
         if (!voteCounts[wordIndex]) {
@@ -60,11 +62,20 @@ function checkVotes(words, teamUsers) {
     if (voters.size === teamUsers.length-1) {
       console.log(`An agreement has been reached on word ${wordIndex}`);
       words[wordIndex].open = true;
+      //clearVoters(words);
       return;
     }
   }
 
-  console.log("No agreement reached yet."+ voters.size + " / " + teamUsers.length-1 + "voters");
+  console.log("No agreement reached yet.");
+}
+
+function clearVoters(words) {
+  setTimeout(() => {
+    words.forEach((word) => {
+      word.voters = [];
+    });
+  }, 1000);
 }
 
 function getUserTeam(nickname, redTeamUsers, blueTeamUsers) {
