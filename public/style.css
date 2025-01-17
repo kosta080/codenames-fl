@@ -90,7 +90,6 @@ a:not(.btn--remix):visited {
 END Glitch hello-app default styles
 ******************************************************************************/
 html {
-  height: 100%;
   width: 100%;
 }
 body {
@@ -98,7 +97,7 @@ body {
   background-color: var(--color-bg);
   margin: 0;
   padding: 0;
-  height: 100%;
+  
   width: 100%;
   color: white;
 }
