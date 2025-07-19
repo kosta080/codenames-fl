@@ -1,0 +1,140 @@
+<div id="tutorial-overlay" class="tutorial-overlay">
+  <div class="tutorial-content">
+    <div class="box p-bottom right">Step 1: Enter your nickname</div>
+    <div class="box p-top left" style="top: 562px; left: 100;">Поле: Капитаны видят Цвета картчик всегда, игроки только после того как их откроют</div>
+
+
+    <div class="box p-top left" style="top: 299px;left: 107px;">Выбор роли</div>
+    <div class="box p-right bottom" style="bottom: 30px; left: 22px;">Цвет фона отображает вшу команду</div>
+  </div>
+  <button id="close-tutorial" class="close-btn">Close</button>
+</div>
+
+<style>
+  .tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-family: fantasy;
+  }
+
+  .tutorial-content {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .hidden {
+     display: none; 
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .box {
+    position: fixed;
+    width: 233px;
+    height: 109px;
+    display: inline-block;
+    border-radius: 15px;
+    background: white;
+    padding: 11px;
+    box-sizing: border-box;
+    filter: drop-shadow(0px 5px 9px black) drop-shadow(0px 4px 18px black);
+  }
+
+  .box::before {
+    content: "";
+    position: absolute;
+    height: var(--h,20px);
+    width: var(--w,30px);
+    background: inherit;
+    transform:scale(var(--x,1),var(--y,1));
+  }
+
+  .box.p-bottom::before{
+    top: 100%;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .box.p-bottom.alt::before{
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  .box.p-top::before{
+    bottom: 100%;
+    clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  }
+  .box.p-top.alt::before{
+    clip-path: polygon(0 100%, 100% 100%, 100% 0);
+  }
+  .box.p-left::before{
+    right: 100%;
+    clip-path: polygon(100% 0, 100% 100%,0% 50%);
+  }
+  .box.p-left.alt::before{
+    clip-path: polygon(100% 0, 100% 100%,0% 100%);
+  }
+  .box.p-right::before{
+    left: 100%;
+    clip-path: polygon(0% 0, 0% 100%,100% 50%);
+  }
+  .box.p-right.alt::before{
+    clip-path: polygon(0% 0, 0% 100%,100% 100%);
+  }
+
+  .box.right::before{
+    right:var(--p,20px);
+  }
+  .box.left::before {
+    left:var(--p,20px);
+  }
+  .box.top::before{
+    top:var(--p,20px);
+  }
+  .box.bottom::before {
+    bottom:var(--p,20px);
+  }
+
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const closeButton = document.getElementById("close-tutorial");
+    const tutorialObject = document.getElementById("tutorialObject");
+    const tt = document.getElementById("leaveRoomButton");
+    
+    if (!tt)
+    {
+      console.warn("no tt");
+    }  
+    if (!closeButton)
+    {
+      console.warn("no closeButton");
+    }
+    if (!tutorialObject)
+    {
+      console.warn("no tutorialObject");
+    }  
+      
+    closeButton.addEventListener("click", () => {
+      tutorialObject.style.display = "none";
+    });
+ 
+  });
+</script>

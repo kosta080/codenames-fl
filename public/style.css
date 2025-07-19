@@ -1,7 +1,7 @@
 :root {
   --color-bg: #898279;
   --color-text-main: #000000;
-  --color-text-header: #2800FF;
+  --color-text-header: #ffffff;
   --color-primary: #AFECE0;
   --wrapper-height: 87vh;
   --image-max-width: 300px;
@@ -118,6 +118,7 @@ body {
   flex-direction: column;
   align-items: left;
   justify-content: left;
+  padding: 10px;
 }
 
 p {
@@ -134,7 +135,7 @@ ul {
   color: var(--color-text-header);
   font-style: normal;
   font-weight: bold;
-  font-size: 70px;
+  font-size: 50px;
   line-height: 105%;
   margin: 2rem 0 0;
 }
@@ -268,7 +269,7 @@ h2 {
   background: var(--color-gray1);
   height: 20vw;
   width: 20vw;
-  height: 12vw;
+  height: 18vw;
   padding: 0px;
   padding-top: 4px;
   display: flex;

@@ -43,12 +43,12 @@
     <br>
 
     <div id="team-btns">
-      <button class="team-btn red-item2 ds be" id="redLeaderButton">Become Red Caprain</button>
-      <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Become Blue Caprain</button>
+      <button class="team-btn red-item2 ds be" id="redLeaderButton">Стать капитаном красных</button>
+      <button class="team-btn blue-item2 ds be" id="blueLeaderButton">Стать капитаном синих</button>
       <br><br>
 
-      <button class="team-btn red-item2 ds be" id="redJoinButton">Join Red</button>
-      <button class="team-btn blue-item2 ds be" id="blueJoinButton">Join Blue</button>
+      <button class="team-btn red-item2 ds be" id="redJoinButton">Присоединиться к красным</button>
+      <button class="team-btn blue-item2 ds be" id="blueJoinButton">Присоединиться к синим</button>
       <br><br>
     </div>
 
@@ -79,11 +79,15 @@
       <button class="item" data-button-id="23">23</button>
       <button class="item" data-button-id="24">24</button>
     </div>
-
-    <button id="leaveRoomButton">Leave Room</button>
-    <button id="leaveTeamButton">Leave Team</button>
-    <button id="restartGameButton">Restart Game</button>
+    <br><br>
+    <button id="leaveRoomButton">Выйти из комнаты</button>
+    <button id="leaveTeamButton">Выйти из команды</button>
+    <button id="restartGameButton">Перезапустить игру</button>
+    <button id="showTutorial">Как играть</button>
   </div>
+
+  <object id="tutorialObject" data="tutorial.html" type="text/html" style="position: fixed; z-index: 999; top: 0; left: 0; width: 100vw; height: 100vw;"></object>
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/effects/exp.js"></script>
@@ -98,6 +102,10 @@
     const teamRed = document.getElementById("team-red");
     const wrapper = document.getElementById("wrapper");
     const teamBtns = document.getElementById("team-btns");
+    const showTutorial = document.getElementById("showTutorial");
+    const tutorialOverlay = document.getElementById("tutorial-overlay");
+
+    console.log("-->" + tutorialObject);
 
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const ws = new WebSocket(`${protocol}://${window.location.host}`);
@@ -376,6 +384,11 @@
       const buttonId = parseInt(event.target.getAttribute("data-button-id"), 10); // Convert to integer
       console.log(`Button with ID ${buttonId} was clicked!`);
       ws.send(JSON.stringify({ type: "buttonClick", buttonId, nickname }));
+    });
+
+    document.getElementById("showTutorial").addEventListener("click", (event) => {
+      alert(tutorialOverlay);
+      tutorialOverlay.style.display = "block";
     });
 
   </script>
